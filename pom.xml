@@ -12,5 +12,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>force-rest-api</id>
+            <name>temp force-rest-api repository on ryanbrainard's GitHub</name>
+            <url>https://raw.github.com/ryanbrainard/repo/master/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.force.api</groupId>
+            <artifactId>force-rest-api</artifactId>
+            <version>0.0.19-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     
 </project>

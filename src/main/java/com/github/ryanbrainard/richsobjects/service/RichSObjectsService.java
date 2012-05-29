@@ -1,19 +1,25 @@
-package com.github.ryanbrainard.richsobjects;
+package com.github.ryanbrainard.richsobjects.service;
 
+
+import com.github.ryanbrainard.richsobjects.RichSObject;
+import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Ryan Brainard
+ */
 public interface RichSObjectsService {
 
-    List<DescribeSObject> listSObjectTypes();
+    List<SObjectDescription> listSObjectTypes();
 
     Iterator<RichSObject> getRecentItems(String type);
 
     RichSObject getSObject(String type, String id);
 
-    DescribeSObject describeSObjectType(String type);
+    SObjectDescription describeSObjectType(String type);
 
     RichSObject newSObject(String type);
 

@@ -1,51 +1,11 @@
-package com.github.ryanbrainard.richsobjects;
+package com.github.ryanbrainard.richsobjects.api.model;
 
 import java.util.List;
-import java.util.Map;
 
-interface DescribeSObject {
-
-    String getName();
-
-    String getLabel();
-
-    Boolean isCustom();
-
-    String getKeyPrefix();
-
-    String getLabelPlural();
-
-    Boolean isLayoutable();
-
-    Boolean isActivateable();
-
-    Boolean isUpdateable();
-
-    Map<String, String> getUrls();
-
-    Boolean isCreateable();
-
-    Boolean isDeletable();
-
-    Boolean isFeedEnabled();
-
-    Boolean isQueryable();
-
-    Boolean isReplicateable();
-
-    Boolean isRetrieveable();
-
-    Boolean isUndeletable();
-
-    Boolean isTriggerable();
-
-    Boolean isMergeable();
-
-    Boolean isDeprecatedAndHidden();
-
-    Boolean isCustomSetting();
-
-    Boolean isSearchable();
+/**
+ * @author Ryan Brainard
+ */
+public interface SObjectDescription extends BasicSObjectDescription {
 
     List<Field> getFields();
 

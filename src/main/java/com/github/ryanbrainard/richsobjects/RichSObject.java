@@ -1,5 +1,7 @@
 package com.github.ryanbrainard.richsobjects;
 
+import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
+
 import java.util.Iterator;
 
 /**
@@ -7,15 +9,19 @@ import java.util.Iterator;
  */
 public interface RichSObject extends Iterable<RichSObject.RichField> {
 
-    DescribeSObject getMetadata();
+    SObjectDescription getMetadata();
 
     RichField get(String fieldName);
 
     Iterator<RichField> getFields();
 
     public interface RichField {
+
         RichSObject getParent();
-        DescribeSObject.Field getMetadata();
+
+        SObjectDescription.Field getMetadata();
+
         Object getValue();
+
     }
 }

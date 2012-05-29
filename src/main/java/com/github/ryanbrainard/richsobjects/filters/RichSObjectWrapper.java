@@ -1,4 +1,7 @@
-package com.github.ryanbrainard.richsobjects;
+package com.github.ryanbrainard.richsobjects.filters;
+
+import com.github.ryanbrainard.richsobjects.RichSObject;
+import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
 import java.util.Iterator;
 
@@ -14,7 +17,7 @@ public abstract class RichSObjectWrapper implements RichSObject {
     }
     
     @Override
-    public DescribeSObject getMetadata() {
+    public SObjectDescription getMetadata() {
         return wrapped.getMetadata();
     }
 

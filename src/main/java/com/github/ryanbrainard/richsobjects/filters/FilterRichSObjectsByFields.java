@@ -1,4 +1,6 @@
-package com.github.ryanbrainard.richsobjects;
+package com.github.ryanbrainard.richsobjects.filters;
+
+import com.github.ryanbrainard.richsobjects.RichSObject;
 
 import java.util.Iterator;
 

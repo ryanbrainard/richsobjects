@@ -1,4 +1,4 @@
-package com.github.ryanbrainard.richsobjects;
+package com.github.ryanbrainard.richsobjects.filters;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

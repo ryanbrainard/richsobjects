@@ -1,5 +1,7 @@
 package com.github.ryanbrainard.richsobjects;
 
+import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
+
 import java.util.*;
 
 /**
@@ -7,16 +9,16 @@ import java.util.*;
  */
 public class ImmutableRichSObject implements RichSObject {
 
-    private final DescribeSObject metadata;
+    private final SObjectDescription metadata;
     private final Map<String, Object> record;
-    private final Map<String, DescribeSObject.Field> indexedFieldMetadata;
-    private final List<DescribeSObject.Field> sortedFieldMetadata;
+    private final Map<String, SObjectDescription.Field> indexedFieldMetadata;
+    private final List<SObjectDescription.Field> sortedFieldMetadata;
 
-    public ImmutableRichSObject(DescribeSObject metadata, Map<String, ?> record) {
+    public ImmutableRichSObject(SObjectDescription metadata, Map<String, ?> record) {
         this(metadata, record, ORDER_BY_FIELD_LABEL);
     }
 
-    public ImmutableRichSObject(DescribeSObject metadata, Map<String, ?> record, Comparator<DescribeSObject.Field> sortFieldsBy) {
+    public ImmutableRichSObject(SObjectDescription metadata, Map<String, ?> record, Comparator<SObjectDescription.Field> sortFieldsBy) {
         this.metadata = metadata;
 
         final Map<String, Object> tmpRecord = new HashMap<String, Object>(record.size());
@@ -25,19 +27,19 @@ public class ImmutableRichSObject implements RichSObject {
         }
         this.record = Collections.unmodifiableMap(tmpRecord);
 
-        final Map<String,DescribeSObject.Field> tmpIndexedFieldMetadata = new HashMap<String,DescribeSObject.Field>(metadata.getFields().size());
-        for (DescribeSObject.Field f : metadata.getFields()) {
+        final Map<String,SObjectDescription.Field> tmpIndexedFieldMetadata = new HashMap<String,SObjectDescription.Field>(metadata.getFields().size());
+        for (SObjectDescription.Field f : metadata.getFields()) {
             tmpIndexedFieldMetadata.put(f.getName().toUpperCase(), f);
         }
         this.indexedFieldMetadata = Collections.unmodifiableMap(tmpIndexedFieldMetadata);
 
-        final List<DescribeSObject.Field> tmpSortedFieldMetadata = new ArrayList<DescribeSObject.Field>(metadata.getFields());
+        final List<SObjectDescription.Field> tmpSortedFieldMetadata = new ArrayList<SObjectDescription.Field>(metadata.getFields());
         Collections.sort(tmpSortedFieldMetadata, sortFieldsBy);
         this.sortedFieldMetadata = Collections.unmodifiableList(tmpSortedFieldMetadata);
     }
 
     @Override
-    public DescribeSObject getMetadata() {
+    public SObjectDescription getMetadata() {
         return metadata;
     }
 
@@ -54,7 +56,7 @@ public class ImmutableRichSObject implements RichSObject {
     @Override
     public Iterator<RichField> getFields() {
         return new Iterator<RichField>() {
-            private final Iterator<DescribeSObject.Field> fieldIterator = sortedFieldMetadata.iterator();
+            private final Iterator<SObjectDescription.Field> fieldIterator = sortedFieldMetadata.iterator();
 
             @Override
             public boolean hasNext() {
@@ -87,7 +89,7 @@ public class ImmutableRichSObject implements RichSObject {
         }
 
         @Override
-        public DescribeSObject.Field getMetadata() {
+        public SObjectDescription.Field getMetadata() {
             return indexedFieldMetadata.get(fieldName);
         }
 
@@ -98,9 +100,9 @@ public class ImmutableRichSObject implements RichSObject {
         }
     }
 
-    public static Comparator<DescribeSObject.Field> ORDER_BY_FIELD_LABEL = new Comparator<DescribeSObject.Field>() {
+    public static Comparator<SObjectDescription.Field> ORDER_BY_FIELD_LABEL = new Comparator<SObjectDescription.Field>() {
         @Override
-        public int compare(DescribeSObject.Field o1, DescribeSObject.Field o2) {
+        public int compare(SObjectDescription.Field o1, SObjectDescription.Field o2) {
             return o1.getLabel().compareTo(o2.getLabel());
         }
     };

@@ -5,10 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.ryanbrainard</groupId>
-    <artifactId>richsobjects</artifactId>
+    <artifactId>richsobjects-parent</artifactId>
     <packaging>pom</packaging>
     <version>0.1-SNAPSHOT</version>
+
     <modules>
+        <module>richsobjects-core</module>
         <module>richsobjects-force-rest-api</module>
     </modules>
 
@@ -16,13 +18,20 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.2.1</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <artifactId>richsobjects</artifactId>
+                <groupId>com.github.ryanbrainard</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.2.1</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 </project>

@@ -1,6 +1,9 @@
-package com.github.ryanbrainard.richsobjects;
+package com.github.ryanbrainard.richobjects;
 
-import com.force.api.*;
+import com.force.api.ApiSession;
+import com.force.api.DescribeGlobal;
+import com.force.api.DescribeSObject;
+import com.force.api.ForceApi;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClient;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClientProvider;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;

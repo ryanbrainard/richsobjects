@@ -6,31 +6,22 @@
 
     <groupId>com.github.ryanbrainard</groupId>
     <artifactId>richsobjects</artifactId>
+    <packaging>pom</packaging>
     <version>0.1-SNAPSHOT</version>
+    <modules>
+        <module>richsobjects-force-rest-api</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>force-rest-api</id>
-            <name>temp force-rest-api repository on ryanbrainard's GitHub</name>
-            <url>https://raw.github.com/ryanbrainard/repo/master/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
-        <dependency>
-            <groupId>com.force.api</groupId>
-            <artifactId>force-rest-api</artifactId>
-            <version>0.0.19-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.2.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     

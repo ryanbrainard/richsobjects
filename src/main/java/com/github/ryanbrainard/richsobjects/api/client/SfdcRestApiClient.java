@@ -1,8 +1,8 @@
 package com.github.ryanbrainard.richsobjects.api.client;
 
+import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;
 import com.github.ryanbrainard.richsobjects.api.model.GlobalDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
-import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;
 
 import java.util.Map;
 

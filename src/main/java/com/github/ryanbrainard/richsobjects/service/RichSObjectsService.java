@@ -2,6 +2,7 @@ package com.github.ryanbrainard.richsobjects.service;
 
 
 import com.github.ryanbrainard.richsobjects.RichSObject;
+import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public interface RichSObjectsService {
 
-    List<SObjectDescription> listSObjectTypes();
+    List<BasicSObjectDescription> listSObjectTypes();
 
     Iterator<RichSObject> getRecentItems(String type);
 
@@ -23,11 +24,11 @@ public interface RichSObjectsService {
 
     RichSObject newSObject(String type);
 
-    RichSObject existingSObject(String type, Map<String, String> record);
+    RichSObject existingSObject(String type, Map<String, ?> record);
 
-    void updateSObject(String type, String id, Map<String, String> record);
+    void updateSObject(String type, String id, Map<String, ?> record);
 
-    String createSObject(String type, Map<String, String> record);
+    String createSObject(String type, Map<String, ?> record);
 
     void deleteSObject(String type, String id);
 

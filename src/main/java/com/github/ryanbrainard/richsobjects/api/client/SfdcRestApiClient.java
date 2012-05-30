@@ -17,11 +17,11 @@ public interface SfdcRestApiClient {
 
     SObjectDescription describeSObject(String type);
 
-    String createSObject(String type, Map<String, String> record);
+    String createSObject(String type, Map<String, ?> record);
 
-    String updateSObject(String type, String id, Map<String, String> record);
+    void updateSObject(String type, String id, Map<String, ?> record);
 
     void deleteSObject(String type, String id);
 
-    Map<String, String> getSObject(String sobject, String id);
+    Map<String, ?> getSObject(String type, String id);
 }

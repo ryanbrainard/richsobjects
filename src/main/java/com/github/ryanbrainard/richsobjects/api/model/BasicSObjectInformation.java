@@ -9,5 +9,5 @@ import java.util.Map;
 public interface BasicSObjectInformation {
     BasicSObjectDescription getBasicObjectDescribe();
 
-    List<Map<String, String>> getRecentItems();
+    List<Map<String, ?>> getRecentItems();
 }

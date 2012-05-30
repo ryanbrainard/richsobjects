@@ -10,5 +10,5 @@ public interface GlobalDescription {
 
     Integer getMaxBatchSize();
 
-    List<SObjectDescription> getSObjects();
+    List<BasicSObjectDescription> getSObjects();
 }

@@ -24,7 +24,9 @@ public class ForceApiProvider implements SfdcRestApiClientProvider {
     public SfdcRestApiClient get() {
         return new SfdcRestApiClient() {
 
-            private final ForceApi api = new ForceApi(new ApiSession().setAccessToken(System.getProperty("sfdc.test.sessionId")).setApiEndpoint(System.getProperty("sfdc.test.endpoint")));
+            private final ForceApi api = new ForceApi(new ApiSession()
+                    .setAccessToken(System.getProperty("sfdc.test.sessionId"))
+                    .setApiEndpoint(System.getProperty("sfdc.test.endpoint")));
 
             @Override
             public GlobalDescription describeGlobal() {

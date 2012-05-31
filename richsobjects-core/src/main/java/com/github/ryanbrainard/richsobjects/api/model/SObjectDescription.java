@@ -7,9 +7,9 @@ import java.util.List;
  */
 public interface SObjectDescription extends BasicSObjectDescription {
 
-    List<Field> getFields();
+    List<? extends Field> getFields();
 
-    List<ChildEntity> getChildRelationships();
+    List<? extends ChildEntity> getChildRelationships();
 
     static interface Field {
         Integer getLength();

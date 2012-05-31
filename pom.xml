@@ -12,6 +12,7 @@
     <modules>
         <module>richsobjects-core</module>
         <module>richsobjects-force-rest-api</module>
+        <module>richsobjects-jersey-client</module>
     </modules>
 
     <properties>

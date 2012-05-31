@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class ForceApiTest {
+public class ForceApiIT {
 
     private RichSObjectsServiceImpl service = new RichSObjectsServiceImpl();
     

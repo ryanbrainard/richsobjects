@@ -1,21 +1,34 @@
 package com.github.ryanbrainard.richobjects;
 
 import com.github.ryanbrainard.richsobjects.RichSObject;
+import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import com.github.ryanbrainard.richsobjects.service.RichSObjectsServiceImpl;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Ryan Brainard
  */
-public class SfdcRestApiJerseyClientTest {
+public class SfdcRestApiJerseyClientIT {
 
     private RichSObjectsServiceImpl service = new RichSObjectsServiceImpl();
-    
+
+    @Test
+    public void testListSObjectTypes() {
+        List<BasicSObjectDescription> basicSObjectDescriptions = service.listSObjectTypes();
+        assertCollectionContains(basicSObjectDescriptions, "Account", new ElementMatcher<BasicSObjectDescription, String>() {
+            @Override
+            public boolean matches(BasicSObjectDescription basicSObjectDescription, String matches) {
+                return basicSObjectDescription.getName().equals(matches);
+            }
+        });
+    }
+
     @Test
     public void testDescribeSObject() {
         SObjectDescription rso = service.describeSObjectType("Account");
@@ -37,5 +50,16 @@ public class SfdcRestApiJerseyClientTest {
         Assert.assertEquals(acct2.get("Name").getValue(), "TEST2");
 
         service.deleteSObject("Account", acctId);
+    }
+
+    private static interface ElementMatcher<E,M> {
+        boolean matches(E element, M matches);
+    }
+
+    private <E,M> void assertCollectionContains(List<E> collection, M matches, ElementMatcher<E,M> elementMatcher) {
+        for (E element : collection) {
+            if (elementMatcher.matches(element, matches)) return;
+        }
+        Assert.fail("Element [" + matches + "] not found in collection: \n" + collection);
     }
 }

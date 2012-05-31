@@ -24,6 +24,7 @@ public class SfdcRestApiJerseyClient implements SfdcRestApiClient {
     {
         final ClientConfig config = new DefaultClientConfig();
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+        config.getClasses().add(ObjectMapperProvider.class);
 
         final Client jerseyClient = Client.create(config);
         jerseyClient.addFilter(new AuthorizationHeaderFilter(System.getProperty("sfdc.test.sessionId")));
@@ -43,7 +44,7 @@ public class SfdcRestApiJerseyClient implements SfdcRestApiClient {
 
     @Override
     public SObjectDescription describeSObject(String type) {
-        return sobjectsResource.path("/" + type + "/describe").get(SObjectDescriptionImpl.class);
+        return sobjectsResource.path("/" + type + "/describe").get(SObjectDescription.class);
     }
 
     @Override

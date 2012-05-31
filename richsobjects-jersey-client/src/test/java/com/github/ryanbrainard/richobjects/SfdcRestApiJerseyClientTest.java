@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class JerseyClientSfdcApiClientTest {
+public class SfdcRestApiJerseyClientTest {
 
     private RichSObjectsServiceImpl service = new RichSObjectsServiceImpl();
     

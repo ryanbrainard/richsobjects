@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,11 +40,18 @@ public abstract class AbstractRichSObjectServiceTest {
     }
 
     @Test
-    public void testDescribeSObject() {
-        SObjectDescription rso = service.describeSObjectType("Account");
-        Assert.assertEquals(rso.getName(), "Account");
+    public void testDescribeSObjectType() {
+        SObjectDescription description = service.describeSObjectType("Account");
+        Assert.assertEquals(description.getName(), "Account");
+        Assert.assertNotNull(description.getFields());
     }
 
+    @Test
+    public void testGetRecentItems() {
+        Iterator<RichSObject> recents = service.getRecentItems("Account");
+        Assert.assertTrue(recents.hasNext());
+    }
+    
     @Test
     public void testSObjectCRUD() {
         Map<String, String> rawAcct = new HashMap<String, String>(1);
@@ -65,6 +73,14 @@ public abstract class AbstractRichSObjectServiceTest {
         boolean matches(E element, M matches);
     }
 
+    private <E,M> void assertIteratorContains(Iterator<E> iterator, M matches, ElementMatcher<E,M> elementMatcher) {
+        while(iterator.hasNext()) {
+            E element = iterator.next();
+            if (elementMatcher.matches(element, matches)) return;
+        }
+        Assert.fail("Element [" + matches + "] not found in iterator: \n" + iterator);
+    }
+    
     private <E,M> void assertCollectionContains(List<E> collection, M matches, ElementMatcher<E,M> elementMatcher) {
         for (E element : collection) {
             if (elementMatcher.matches(element, matches)) return;

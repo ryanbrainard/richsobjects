@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public abstract class AbstractRichSObjectServiceTest {
+public abstract class AbstractRichSObjectServiceIT {
 
     private RichSObjectsService service;
     

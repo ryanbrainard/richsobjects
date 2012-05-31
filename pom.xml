@@ -59,4 +59,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>com.github.ryanbrainard.repo</id>
+            <name>ryanbrainard github repo</name>
+            <url>file:///Users/brainard/Development/repo</url>
+        </repository>
+    </distributionManagement>
 </project>

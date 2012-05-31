@@ -21,14 +21,14 @@ public class SfdcRestApiJerseyClient implements SfdcRestApiClient {
     private final WebResource baseResource;
     private final WebResource sobjectsResource;
 
-    {
+    SfdcRestApiJerseyClient(String accessToken, String apiEndpoint, String version){
         final ClientConfig config = new DefaultClientConfig();
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
         config.getClasses().add(ObjectMapperProvider.class);
 
         final Client jerseyClient = Client.create(config);
-        jerseyClient.addFilter(new AuthorizationHeaderFilter(System.getProperty("sfdc.test.sessionId")));
-        baseResource = jerseyClient.resource(System.getProperty("sfdc.test.endpoint") + "/services/data/v24.0"); // TODO: versioning
+        jerseyClient.addFilter(new AuthorizationHeaderFilter(accessToken));
+        baseResource = jerseyClient.resource(apiEndpoint + "/services/data/" + version);
         sobjectsResource = baseResource.path("/sobjects");
     }
 

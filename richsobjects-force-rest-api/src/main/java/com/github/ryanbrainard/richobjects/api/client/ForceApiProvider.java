@@ -21,12 +21,12 @@ import java.util.Map;
 public class ForceApiProvider implements SfdcRestApiClientProvider {
     
     @Override
-    public SfdcRestApiClient get() {
+    public SfdcRestApiClient get(final String accessToken, final String apiEndpoint, /*TODO*/ final String version) {
         return new SfdcRestApiClient() {
 
             private final ForceApi api = new ForceApi(new ApiSession()
-                    .setAccessToken(System.getProperty("sfdc.test.sessionId"))
-                    .setApiEndpoint(System.getProperty("sfdc.test.endpoint")));
+                    .setAccessToken(accessToken)
+                    .setApiEndpoint(apiEndpoint));
 
             @Override
             public GlobalDescription describeGlobal() {

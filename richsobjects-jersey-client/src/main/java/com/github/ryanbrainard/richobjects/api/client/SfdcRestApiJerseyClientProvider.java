@@ -8,8 +8,8 @@ import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClientProvider
 public class SfdcRestApiJerseyClientProvider implements SfdcRestApiClientProvider {
     
     @Override
-    public SfdcRestApiClient get() {
-        return new SfdcRestApiJerseyClient();
+    public SfdcRestApiClient get(String accessToken, String apiEndpoint, String version) {
+        return new SfdcRestApiJerseyClient(accessToken, apiEndpoint, version);
     }
 
 }

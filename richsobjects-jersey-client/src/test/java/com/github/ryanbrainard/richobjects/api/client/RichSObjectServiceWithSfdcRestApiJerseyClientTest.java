@@ -1,6 +1,6 @@
 package com.github.ryanbrainard.richobjects.api.client;
 
-import com.github.ryanbrainard.richsobjects.api.AbstractRichSObjectServiceTest;
+import com.github.ryanbrainard.richsobjects.api.client.AbstractRichSObjectServiceTest;
 
 /**
  * @author Ryan Brainard

@@ -2,7 +2,8 @@ package com.github.ryanbrainard.richsobjects.service;
 
 import com.github.ryanbrainard.richsobjects.ImmutableRichSObject;
 import com.github.ryanbrainard.richsobjects.RichSObject;
-import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClientLoader;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClient;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiLoader;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
@@ -13,9 +14,13 @@ import java.util.*;
  */
 public class RichSObjectsServiceImpl implements RichSObjectsService {
 
+    protected SfdcRestApiClient getApiClient() {
+        return SfdcRestApiLoader.get(24.0);
+    }
+
     @Override
     public List<BasicSObjectDescription> listSObjectTypes() {
-        final List<BasicSObjectDescription> metadata = SfdcRestApiClientLoader.get().describeGlobal().getSObjects();
+        final List<BasicSObjectDescription> metadata = getApiClient().describeGlobal().getSObjects();
         Collections.sort(metadata, new Comparator<BasicSObjectDescription>() {
             @Override
             public int compare(BasicSObjectDescription o1, BasicSObjectDescription o2) {
@@ -27,7 +32,7 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
 
     @Override
     public SObjectDescription describeSObjectType(String type) {
-        return SfdcRestApiClientLoader.get().describeSObject(type);
+        return getApiClient().describeSObject(type);
     }
 
     @Override
@@ -43,17 +48,17 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
     
     @Override
     public String createSObject(String type, Map<String, ?> record) {
-        return SfdcRestApiClientLoader.get().createSObject(type, record);
+        return getApiClient().createSObject(type, record);
     }
 
     @Override
     public void updateSObject(String type, String id, Map<String, ?> record) {
-        SfdcRestApiClientLoader.get().updateSObject(type, id, record);
+        getApiClient().updateSObject(type, id, record);
     }
 
     @Override
     public void deleteSObject(String type, String id) {
-        SfdcRestApiClientLoader.get().deleteSObject(type, id);
+        getApiClient().deleteSObject(type, id);
     }
 
     @Override
@@ -62,13 +67,13 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
     }
 
     private Map<String, ?> getRawSObject(String sobject, String id) {
-        return SfdcRestApiClientLoader.get().getSObject(sobject, id);
+        return getApiClient().getSObject(sobject, id);
     }
 
     @Override
     public Iterator<RichSObject> getRecentItems(String type) {
         final SObjectDescription metadata = describeSObjectType(type);
-        final Iterator<Map<String,?>> rawRecentItems = SfdcRestApiClientLoader.get().describeSObjectBasic(type).getRecentItems().iterator();
+        final Iterator<Map<String,?>> rawRecentItems = getApiClient().describeSObjectBasic(type).getRecentItems().iterator();
 
         return new Iterator<RichSObject>() {
             @Override

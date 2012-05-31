@@ -10,9 +10,10 @@
     <version>0.1-SNAPSHOT</version>
 
     <modules>
-        <module>richsobjects-core</module>
+        <module>richsobjects</module>
         <module>richsobjects-force-rest-api</module>
         <module>richsobjects-jersey-client</module>
+        <module>richsobjects-api-provider-base-tests</module>
     </modules>
 
     <properties>
@@ -27,6 +28,12 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <artifactId>richsobjects-api-provider-base-tests</artifactId>
+                <groupId>com.github.ryanbrainard</groupId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>6.2.1</version>
@@ -34,5 +41,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 </project>

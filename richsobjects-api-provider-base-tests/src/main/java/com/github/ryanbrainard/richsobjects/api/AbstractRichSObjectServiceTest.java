@@ -1,10 +1,13 @@
-package com.github.ryanbrainard.richobjects;
+package com.github.ryanbrainard.richsobjects.api;
 
 import com.github.ryanbrainard.richsobjects.RichSObject;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClientLoader;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
+import com.github.ryanbrainard.richsobjects.service.RichSObjectsService;
 import com.github.ryanbrainard.richsobjects.service.RichSObjectsServiceImpl;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -14,9 +17,15 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class SfdcRestApiJerseyClientIT {
+public abstract class AbstractRichSObjectServiceTest {
 
-    private RichSObjectsServiceImpl service = new RichSObjectsServiceImpl();
+    private RichSObjectsService service;
+    
+    @BeforeClass
+    public void setupService() {
+        service = new RichSObjectsServiceImpl();
+        System.out.println("Running " + this.getClass() + " with API provider: " + SfdcRestApiClientLoader.get().getClass());
+    }
 
     @Test
     public void testListSObjectTypes() {

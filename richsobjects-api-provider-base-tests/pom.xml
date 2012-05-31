@@ -10,15 +10,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>richsobjects-force-rest-api</artifactId>
-
-    <repositories>
-        <repository>
-            <id>force-rest-api</id>
-            <name>temp force-rest-api repository on ryanbrainard's GitHub</name>
-            <url>https://raw.github.com/ryanbrainard/repo/master/</url>
-        </repository>
-    </repositories>
+    <artifactId>richsobjects-api-provider-base-tests</artifactId>
 
     <dependencies>
         <dependency>
@@ -26,14 +18,10 @@
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
         <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
-            <groupId>com.github.ryanbrainard</groupId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.force.api</groupId>
-            <artifactId>force-rest-api</artifactId>
-            <version>0.0.19-SNAPSHOT</version>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
+
 </project>

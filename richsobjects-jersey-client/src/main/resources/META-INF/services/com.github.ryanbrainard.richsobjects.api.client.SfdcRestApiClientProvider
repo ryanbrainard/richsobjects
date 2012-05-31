@@ -1,1 +1,1 @@
-com.github.ryanbrainard.richobjects.SfdcRestApiJerseyClientProvider
+com.github.ryanbrainard.richobjects.api.client.SfdcRestApiJerseyClientProvider

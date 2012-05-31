@@ -1,4 +1,4 @@
-package com.github.ryanbrainard.richobjects;
+package com.github.ryanbrainard.richobjects.api.client;
 
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;

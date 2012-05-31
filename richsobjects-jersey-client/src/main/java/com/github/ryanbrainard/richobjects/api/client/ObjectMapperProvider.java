@@ -1,4 +1,4 @@
-package com.github.ryanbrainard.richobjects;
+package com.github.ryanbrainard.richobjects.api.client;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;

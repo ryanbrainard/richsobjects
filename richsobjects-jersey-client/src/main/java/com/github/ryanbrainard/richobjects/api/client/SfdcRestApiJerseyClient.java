@@ -1,4 +1,4 @@
-package com.github.ryanbrainard.richobjects;
+package com.github.ryanbrainard.richobjects.api.client;
 
 import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClient;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;

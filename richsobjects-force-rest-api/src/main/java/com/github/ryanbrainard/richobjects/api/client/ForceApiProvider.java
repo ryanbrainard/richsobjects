@@ -1,4 +1,4 @@
-package com.github.ryanbrainard.richobjects;
+package com.github.ryanbrainard.richobjects.api.client;
 
 import com.force.api.ApiSession;
 import com.force.api.DescribeGlobal;

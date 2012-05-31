@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public interface SfdcRestApiClient {
+public interface SfdcApiClient {
 
     GlobalDescription describeGlobal();
 

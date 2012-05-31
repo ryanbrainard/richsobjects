@@ -1,6 +1,6 @@
 package com.github.ryanbrainard.richobjects.api.client;
 
-import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClient;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;
 import com.github.ryanbrainard.richsobjects.api.model.GlobalDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
@@ -16,12 +16,12 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class SfdcRestApiJerseyClient implements SfdcRestApiClient {
+public class SfdcApiJerseyClient implements SfdcApiClient {
 
     private final WebResource baseResource;
     private final WebResource sobjectsResource;
 
-    SfdcRestApiJerseyClient(String accessToken, String apiEndpoint, String version){
+    SfdcApiJerseyClient(String accessToken, String apiEndpoint, String version){
         final ClientConfig config = new DefaultClientConfig();
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
         config.getClasses().add(ObjectMapperProvider.class);

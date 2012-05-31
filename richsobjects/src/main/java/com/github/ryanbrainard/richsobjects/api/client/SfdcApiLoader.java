@@ -6,21 +6,21 @@ import java.util.ServiceLoader;
 /**
  * @author Ryan Brainard
  */
-public class SfdcRestApiLoader {
+public class SfdcApiLoader {
 
-    private SfdcRestApiLoader() {}
+    private SfdcApiLoader() {}
 
-    private static final ServiceLoader<SfdcRestApiSessionProvider> sessionLoader = ServiceLoader.load(
-            SfdcRestApiSessionProvider.class,
-            SfdcRestApiLoader.class.getClassLoader());
+    private static final ServiceLoader<SfdcApiSessionProvider> sessionLoader = ServiceLoader.load(
+            SfdcApiSessionProvider.class,
+            SfdcApiLoader.class.getClassLoader());
 
-    private static final ServiceLoader<SfdcRestApiClientProvider> clientLoader = ServiceLoader.load(
-            SfdcRestApiClientProvider.class,
-            SfdcRestApiLoader.class.getClassLoader());
+    private static final ServiceLoader<SfdcApiClientProvider> clientLoader = ServiceLoader.load(
+            SfdcApiClientProvider.class,
+            SfdcApiLoader.class.getClassLoader());
 
-    public static SfdcRestApiClient get(double version) {
-        final SfdcRestApiSessionProvider sessionProvider = getFirstOrThrow(sessionLoader);
-        final SfdcRestApiClientProvider clientProvider = getFirstOrThrow(clientLoader);
+    public static SfdcApiClient get(double version) {
+        final SfdcApiSessionProvider sessionProvider = getFirstOrThrow(sessionLoader);
+        final SfdcApiClientProvider clientProvider = getFirstOrThrow(clientLoader);
 
         return clientProvider.get(
                 sessionProvider.getAccessToken(),

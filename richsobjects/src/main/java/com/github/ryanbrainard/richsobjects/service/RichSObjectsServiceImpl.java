@@ -2,8 +2,8 @@ package com.github.ryanbrainard.richsobjects.service;
 
 import com.github.ryanbrainard.richsobjects.ImmutableRichSObject;
 import com.github.ryanbrainard.richsobjects.RichSObject;
-import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClient;
-import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiLoader;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcApiLoader;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
@@ -14,8 +14,8 @@ import java.util.*;
  */
 public class RichSObjectsServiceImpl implements RichSObjectsService {
 
-    protected SfdcRestApiClient getApiClient() {
-        return SfdcRestApiLoader.get(24.0);
+    protected SfdcApiClient getApiClient() {
+        return SfdcApiLoader.get(24.0);
     }
 
     @Override

@@ -4,8 +4,8 @@ import com.force.api.ApiSession;
 import com.force.api.DescribeGlobal;
 import com.force.api.DescribeSObject;
 import com.force.api.ForceApi;
-import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClient;
-import com.github.ryanbrainard.richsobjects.api.client.SfdcRestApiClientProvider;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClientProvider;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;
 import com.github.ryanbrainard.richsobjects.api.model.GlobalDescription;
@@ -18,11 +18,11 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class ForceApiProvider implements SfdcRestApiClientProvider {
+public class ForceApiProvider implements SfdcApiClientProvider {
     
     @Override
-    public SfdcRestApiClient get(final String accessToken, final String apiEndpoint, /*TODO*/ final String version) {
-        return new SfdcRestApiClient() {
+    public SfdcApiClient get(final String accessToken, final String apiEndpoint, /*TODO*/ final String version) {
+        return new SfdcApiClient() {
 
             private final ForceApi api = new ForceApi(new ApiSession()
                     .setAccessToken(accessToken)

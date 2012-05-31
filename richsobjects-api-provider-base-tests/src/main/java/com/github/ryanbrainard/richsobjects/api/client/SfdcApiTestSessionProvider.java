@@ -3,7 +3,7 @@ package com.github.ryanbrainard.richsobjects.api.client;
 /**
  * @author Ryan Brainard
  */
-public class SfdcRestApiTestSessionProvider implements SfdcRestApiSessionProvider {
+public class SfdcApiTestSessionProvider implements SfdcApiSessionProvider {
     
     @Override
     public String getAccessToken() {

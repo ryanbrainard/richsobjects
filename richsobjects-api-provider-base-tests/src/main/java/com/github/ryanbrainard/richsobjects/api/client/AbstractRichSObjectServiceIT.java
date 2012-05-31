@@ -24,7 +24,7 @@ public abstract class AbstractRichSObjectServiceIT {
     @BeforeClass
     public void setupService() {
         service = new RichSObjectsServiceImpl();
-        System.out.println("Running " + this.getClass() + " with API provider: " + SfdcRestApiLoader.get(24.0).getClass());
+        System.out.println("Running " + this.getClass() + " with API provider: " + SfdcApiLoader.get(24.0).getClass());
     }
 
     @Test

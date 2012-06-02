@@ -32,4 +32,6 @@ public interface RichSObjectsService {
 
     void deleteSObject(String type, String id);
 
+    Iterator<RichSObject> query(String soql);
+
 }

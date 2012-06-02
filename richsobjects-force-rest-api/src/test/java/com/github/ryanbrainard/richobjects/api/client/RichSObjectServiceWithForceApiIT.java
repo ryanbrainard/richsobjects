@@ -5,9 +5,4 @@ import com.github.ryanbrainard.richsobjects.api.client.AbstractRichSObjectServic
 /**
  * @author Ryan Brainard
  */
-public class RichSObjectServiceWithForceApiIT extends AbstractRichSObjectServiceIT {
-    @Override
-    public void testGetRecentItems() {
-        // TODO: Unimplemented in cluent
-    }
-}
+public class RichSObjectServiceWithForceApiIT extends AbstractRichSObjectServiceIT {}

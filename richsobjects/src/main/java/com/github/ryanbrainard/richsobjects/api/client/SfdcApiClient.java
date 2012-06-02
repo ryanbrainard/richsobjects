@@ -2,6 +2,7 @@ package com.github.ryanbrainard.richsobjects.api.client;
 
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;
 import com.github.ryanbrainard.richsobjects.api.model.GlobalDescription;
+import com.github.ryanbrainard.richsobjects.api.model.QueryResult;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
 import java.util.Map;
@@ -24,4 +25,8 @@ public interface SfdcApiClient {
     void deleteSObject(String type, String id);
 
     Map<String, ?> getSObject(String type, String id);
+
+    QueryResult query(String soql);
+
+    QueryResult queryMore(String nextRecordsUrl);
 }

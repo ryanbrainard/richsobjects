@@ -5,7 +5,6 @@ import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import com.github.ryanbrainard.richsobjects.service.RichSObjectsService;
 import com.github.ryanbrainard.richsobjects.service.RichSObjectsServiceImpl;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -13,6 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static org.testng.Assert.*;
 
 /**
  * @author Ryan Brainard
@@ -41,16 +42,29 @@ public abstract class AbstractRichSObjectServiceIT {
     @Test
     public void testDescribeSObjectType() {
         SObjectDescription description = service.describeSObjectType("Account");
-        Assert.assertEquals(description.getName(), "Account");
-        Assert.assertNotNull(description.getFields());
+        assertEquals(description.getName(), "Account");
+        assertNotNull(description.getFields());
     }
 
     @Test
     public void testGetRecentItems() {
         Iterator<RichSObject> recents = service.getRecentItems("Account");
-        Assert.assertTrue(recents.hasNext());
+        assertTrue(recents.hasNext());
     }
-    
+
+    @Test
+    public void testQuery() {
+        Iterator<RichSObject> queryResults = service.query("SELECT Id FROM Account LIMIT 2001");
+
+        int count = 0;
+        while (queryResults.hasNext()) {
+            assertEquals("Account", queryResults.next().getMetadata().getName());
+            count++;
+        }
+
+        assertEquals(count, 2001);
+    }
+
     @Test
     public void testSObjectCRUD() {
         Map<String, String> rawAcct = new HashMap<String, String>(1);
@@ -58,12 +72,12 @@ public abstract class AbstractRichSObjectServiceIT {
 
         String acctId = service.createSObject("Account", rawAcct);
         final RichSObject acct1 = service.getSObject("Account", acctId);
-        Assert.assertEquals(acct1.get("Name").getValue(), "TEST1");
+        assertEquals(acct1.get("Name").getValue(), "TEST1");
 
         rawAcct.put("Name", "TEST2");
         service.updateSObject("Account", acctId, rawAcct);
         final RichSObject acct2 = service.getSObject("Account", acctId);
-        Assert.assertEquals(acct2.get("Name").getValue(), "TEST2");
+        assertEquals(acct2.get("Name").getValue(), "TEST2");
 
         service.deleteSObject("Account", acctId);
     }
@@ -77,13 +91,13 @@ public abstract class AbstractRichSObjectServiceIT {
             E element = iterator.next();
             if (elementMatcher.matches(element, matches)) return;
         }
-        Assert.fail("Element [" + matches + "] not found in iterator: \n" + iterator);
+        fail("Element [" + matches + "] not found in iterator: \n" + iterator);
     }
     
     private <E,M> void assertCollectionContains(List<E> collection, M matches, ElementMatcher<E,M> elementMatcher) {
         for (E element : collection) {
             if (elementMatcher.matches(element, matches)) return;
         }
-        Assert.fail("Element [" + matches + "] not found in collection: \n" + collection);
+        fail("Element [" + matches + "] not found in collection: \n" + collection);
     }
 }

@@ -6,10 +6,7 @@ import com.force.api.DescribeSObject;
 import com.force.api.ForceApi;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClientProvider;
-import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
-import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;
-import com.github.ryanbrainard.richsobjects.api.model.GlobalDescription;
-import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
+import com.github.ryanbrainard.richsobjects.api.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +82,16 @@ public class ForceApiProvider implements SfdcApiClientProvider {
             public Map<String, ?> getSObject(String type, String id) {
                 //noinspection unchecked
                 return (Map<String, ?>) api.getSObject(type, id).asMap();
+            }
+
+            @Override
+            public QueryResult query(String soql) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public QueryResult queryMore(String nextRecordsUrl) {
+                throw new UnsupportedOperationException();
             }
         };
     }

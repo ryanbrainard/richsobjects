@@ -3,6 +3,7 @@ package com.github.ryanbrainard.richobjects.api.client;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectInformation;
 import com.github.ryanbrainard.richsobjects.api.model.GlobalDescription;
+import com.github.ryanbrainard.richsobjects.api.model.QueryResult;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class SfdcApiJerseyClient implements SfdcApiClient {
 
     private final WebResource baseResource;
+    private final WebResource versionedDateResource;
     private final WebResource sobjectsResource;
 
     SfdcApiJerseyClient(String accessToken, String apiEndpoint, String version){
@@ -28,8 +30,9 @@ public class SfdcApiJerseyClient implements SfdcApiClient {
 
         final Client jerseyClient = Client.create(config);
         jerseyClient.addFilter(new AuthorizationHeaderFilter(accessToken));
-        baseResource = jerseyClient.resource(apiEndpoint + "/services/data/" + version);
-        sobjectsResource = baseResource.path("/sobjects");
+        baseResource = jerseyClient.resource(apiEndpoint);
+        versionedDateResource = jerseyClient.resource(apiEndpoint + "/services/data/" + version);
+        sobjectsResource = versionedDateResource.path("/sobjects");
     }
 
     @Override
@@ -70,5 +73,15 @@ public class SfdcApiJerseyClient implements SfdcApiClient {
     public Map<String, ?> getSObject(String type, String id) {
         //noinspection unchecked
         return (Map<String, ?>) sobjectsResource.path("/" + type + "/" + id).get(Map.class);
+    }
+
+    @Override
+    public QueryResult query(String soql) {
+        return versionedDateResource.path("/query").queryParam("q", soql).get(QueryResult.class);
+    }
+
+    @Override
+    public QueryResult queryMore(String nextRecordsUrl) {
+        return baseResource.path(nextRecordsUrl).get(QueryResult.class);
     }
 }

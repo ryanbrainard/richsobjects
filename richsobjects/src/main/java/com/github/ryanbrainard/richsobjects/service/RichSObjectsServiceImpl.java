@@ -5,6 +5,7 @@ import com.github.ryanbrainard.richsobjects.RichSObject;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcApiLoader;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
+import com.github.ryanbrainard.richsobjects.api.model.QueryResult;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
 import java.util.*;
@@ -83,7 +84,6 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
 
             @Override
             public RichSObject next() {
-                //noinspection unchecked
                 return new ImmutableRichSObject(metadata, rawRecentItems.next());
             }
 
@@ -93,4 +93,39 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
             }
         };
     }
+
+    @Override
+    public Iterator<RichSObject> query(final String soql) {
+        final String type = soql.replaceFirst(".*FROM\\s+(\\w+).*", "$1");
+        final SObjectDescription metadata = describeSObjectType(type);
+        
+        return new Iterator<RichSObject>() {
+            QueryResult queryResult = getApiClient().query(soql);
+            Iterator<Map<String, ?>> queryResultItr = queryResult.getRecords().iterator();
+            
+            @Override
+            public boolean hasNext() {
+                return queryResultItr.hasNext() || !queryResult.isDone();
+            }
+
+            @Override
+            public RichSObject next() {
+                if (queryResultItr.hasNext()) {
+                    return new ImmutableRichSObject(metadata, queryResultItr.next());
+                } else if (!queryResult.isDone()) {
+                    queryResult = getApiClient().queryMore(queryResult.getNextRecordsUrl());
+                    queryResultItr = queryResult.getRecords().iterator();
+                    return next();
+                } else {
+                    throw new NoSuchElementException();
+                }
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("Query results cannot be removed");
+            }
+        };
+    }
+
 }

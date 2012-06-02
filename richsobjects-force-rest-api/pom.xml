@@ -22,7 +22,7 @@
 
     <dependencies>
         <dependency>
-            <artifactId>richsobjects</artifactId>
+            <artifactId>richsobjects-api-provider-interfaces</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
         <dependency>

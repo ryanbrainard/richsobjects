@@ -8,10 +8,7 @@ import com.github.ryanbrainard.richsobjects.service.RichSObjectsServiceImpl;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.testng.Assert.*;
 
@@ -80,6 +77,22 @@ public abstract class AbstractRichSObjectServiceIT {
         assertEquals(acct2.get("Name").getValue(), "TEST2");
 
         service.deleteSObject("Account", acctId);
+    }
+
+    @Test
+    public void testAsTypes() throws Exception {
+        final RichSObject acct = service.query("SELECT Id, Name, CreatedDate, IsClosed, Amount FROM Opportunity WHERE Amount != null LIMIT 1").next();
+
+        assertAsType(acct.get("id"), String.class, String.class);
+        assertAsType(acct.get("name"), String.class, String.class);
+        assertAsType(acct.get("createdDate"), String.class, Date.class);
+        assertAsType(acct.get("isClosed"), Boolean.class, Boolean.class);
+        assertAsType(acct.get("amount"), Double.class, Double.class);
+    }
+
+    private void assertAsType(RichSObject.RichField field, Class<?> expectedRawType, Class<?> expectedConvertedType) {
+        assertEquals(field.getValue().getClass(), expectedRawType);
+        assertEquals(field.asAny().getClass(), expectedConvertedType);
     }
 
     private static interface ElementMatcher<E,M> {

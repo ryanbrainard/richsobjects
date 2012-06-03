@@ -18,6 +18,8 @@ public interface SObjectDescription extends BasicSObjectDescription {
 
         String getType();
 
+        String getSoapType();
+
         String getDefaultValue();
 
         String getLabel();

@@ -2,6 +2,7 @@ package com.github.ryanbrainard.richsobjects;
 
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
+import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -23,5 +24,18 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
 
         Object getValue();
 
+        Object asAny();
+
+        String asString();
+
+        Boolean asBoolean();
+
+        Integer asInteger();
+
+        Double asDouble();
+
+        Date asDate();
+
+        byte[] asBytes();
     }
 }

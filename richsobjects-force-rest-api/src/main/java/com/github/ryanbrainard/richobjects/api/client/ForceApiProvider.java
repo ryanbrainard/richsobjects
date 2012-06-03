@@ -277,6 +277,10 @@ public class ForceApiProvider implements SfdcApiClientProvider {
                             return f.getType();
                         }
 
+                        public String getSoapType() {
+                            return f.getSoapType();
+                        }
+
                         public String getDefaultValue() {
                             return f.getDefaultValue();
                         }

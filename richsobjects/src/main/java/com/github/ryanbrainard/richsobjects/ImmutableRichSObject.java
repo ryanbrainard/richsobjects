@@ -1,13 +1,19 @@
 package com.github.ryanbrainard.richsobjects;
 
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
+import sun.misc.BASE64Decoder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * @author Ryan Brainard
  */
 public class ImmutableRichSObject implements RichSObject {
+
+    private static final BASE64Decoder BASE_64_DECODER = new BASE64Decoder();
+    private static final SimpleDateFormat API_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     private final SObjectDescription metadata;
     private final Map<String, Object> record;
@@ -95,8 +101,91 @@ public class ImmutableRichSObject implements RichSObject {
 
         @Override
         public Object getValue() {
-            // TODO: add type casting based on types in metadata
+            if (!record.containsKey(fieldName)) {
+                final String qualifiedFieldName = getParent().getMetadata().getName() + "." + fieldName;
+                if (!indexedFieldMetadata.containsKey(fieldName)) {
+                    throw new IllegalArgumentException("No such field: " + qualifiedFieldName);
+                } else {
+                    throw new IllegalStateException("Field not queried or value not supplied: " + qualifiedFieldName);
+                }
+            }
+
             return record.get(fieldName);
+        }
+        
+        @Override
+        public Object asAny() {
+            final String soapType = getMetadata().getSoapType();
+
+            if ("xsd:string".equals(soapType) || "tns:ID".equals(soapType)) {
+                return asString();
+            } else if ("xsd:boolean".equals(soapType)) {
+                return asBoolean();
+            } else if ("xsd:int".equals(soapType)) {
+                return asInteger();
+            } else if ("xsd:double".equals(soapType)) {
+                return asDouble();
+            } else if ("xsd:date".equals(soapType) || "xsd:dateTime".equals(soapType)) {
+                return asDate();
+            } else if ("xsd:base64Binary".equals(soapType)) {
+                return asBytes();
+            } else {
+                return getValue();
+            }
+        }
+
+        @Override
+        public String asString() {
+            if (getValue() == null) {
+                return null;
+            }
+            
+            return getValue().toString();
+        }
+
+        @Override
+        public Boolean asBoolean() {
+            if (getValue() instanceof Boolean) {
+                return (Boolean) getValue();
+            } else {
+                return Boolean.valueOf(asString());
+            }
+        }
+
+        @Override
+        public Integer asInteger() {
+            if (getValue() instanceof Integer) {
+                return (Integer) getValue();
+            } else {
+                return Integer.valueOf(asString());
+            }
+        }
+
+        @Override
+        public Double asDouble() {
+            if (getValue() instanceof Double) {
+                return (Double) getValue();
+            } else {
+                return Double.valueOf(asString());
+            }
+        }
+
+        @Override
+        public Date asDate() {
+            if (getValue() == null) {
+                return null;
+            }
+            
+            try {
+                return API_DATE_FORMAT.parse(asString());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public byte[] asBytes() {
+            throw new UnsupportedOperationException(); // TODO
         }
     }
 

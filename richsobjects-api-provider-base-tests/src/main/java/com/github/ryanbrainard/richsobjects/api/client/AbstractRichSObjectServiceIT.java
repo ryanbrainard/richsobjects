@@ -10,6 +10,9 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
+import static com.github.ryanbrainard.richsobjects.ReferenceResolutionStrategies.FULLY;
+import static com.github.ryanbrainard.richsobjects.ReferenceResolutionStrategies.NAME_ONLY;
+import static com.github.ryanbrainard.richsobjects.ReferenceResolutionStrategies.UNRESOLVED;
 import static org.testng.Assert.*;
 
 /**
@@ -81,19 +84,46 @@ public abstract class AbstractRichSObjectServiceIT {
 
     @Test
     public void testAsTypes() throws Exception {
-        final RichSObject acct = service.query("SELECT AuthorId,Body,BodyLength,CreatedDate,Name,IsDeleted FROM Document LIMIT 1").next();
+        final RichSObject doc = service.query("SELECT AuthorId,Body,BodyLength,CreatedDate,Name,IsDeleted FROM Document LIMIT 1").next();
 
-        assertAsType(acct.get("AuthorId"), String.class, String.class);
-        assertAsType(acct.get("Name"), String.class, String.class);
-        assertAsType(acct.get("CreatedDate"), String.class, Date.class);
-        assertAsType(acct.get("IsDeleted"), Boolean.class, Boolean.class);
-        assertAsType(acct.get("BodyLength"), Integer.class, Integer.class);
-        assertAsType(acct.get("Body"), String.class, byte[].class);
+        assertAsType(doc.get("AuthorId"), String.class, String.class);
+        assertAsType(doc.get("Name"), String.class, String.class);
+        assertAsType(doc.get("CreatedDate"), String.class, Date.class);
+        assertAsType(doc.get("IsDeleted"), Boolean.class, Boolean.class);
+        assertAsType(doc.get("BodyLength"), Integer.class, Integer.class);
+        assertAsType(doc.get("Body"), String.class, byte[].class);
+    }
+
+    @Test
+    public void testAsTypesName() throws Exception {
+        final String acctName = String.valueOf(System.currentTimeMillis());
+        final double annualRevenue = 1000D;
+        final String acctId = service.createSObject("Account", new HashMap<String, Object>() {{
+            put("name", acctName);
+            put("annualRevenue", annualRevenue);
+        }});
+        String conId = service.createSObject("Contact", new HashMap<String, Object>() {{
+            put("accountId", acctId);
+            put("lastName", "blah");
+        }});
+
+        assertEquals(service.getSObject("Contact", conId).get("accountId").asAny(UNRESOLVED), acctId);
+        assertEquals(service.getSObject("Contact", conId).get("accountId").asAny(NAME_ONLY), acctName);
+        assertEquals(((RichSObject) service.getSObject("Contact", conId).get("accountId").asAny(FULLY)).get("annualRevenue").getValue(), annualRevenue);
     }
 
     private void assertAsType(RichSObject.RichField field, Class<?> expectedRawType, Class<?> expectedConvertedType) {
         assertEquals(field.getValue().getClass(), expectedRawType);
         assertEquals(field.asAny().getClass(), expectedConvertedType);
+    }
+    
+    @Test
+    public void testAsRef() throws Exception {
+        final RichSObject contact = service.query("SELECT AccountId FROM Contact WHERE AccountId != null LIMIT 1").next();
+        final RichSObject account = contact.get("accountId").asRef();
+
+        assertEquals(contact.getMetadata().getName(), "Contact");
+        assertEquals(account.getMetadata().getName(), "Account");
     }
 
     private static interface ElementMatcher<E,M> {

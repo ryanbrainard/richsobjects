@@ -26,6 +26,8 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
 
         Object asAny();
 
+        Object asAny(ReferenceResolutionStrategy strategy);
+
         String asString();
 
         Boolean asBoolean();
@@ -37,5 +39,8 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
         Date asDate();
 
         byte[] asBytes();
+
+        RichSObject asRef();
     }
+
 }

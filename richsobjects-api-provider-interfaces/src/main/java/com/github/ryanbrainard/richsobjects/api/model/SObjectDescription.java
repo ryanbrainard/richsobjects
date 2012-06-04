@@ -56,7 +56,7 @@ public interface SObjectDescription extends BasicSObjectDescription {
 
         String getRelationshipName();
 
-        List<String> getReferenceToEntity();
+        List<String> getReferenceTo();
 
         Boolean isRestrictedPicklist();
 

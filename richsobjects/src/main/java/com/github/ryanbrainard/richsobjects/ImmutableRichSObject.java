@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * @author Ryan Brainard
  */
-public class ImmutableRichSObject implements RichSObject {
+class ImmutableRichSObject implements RichSObject {
 
     private static final BASE64Decoder BASE_64_DECODER = new BASE64Decoder();
     private static final SimpleDateFormat API_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -105,22 +105,30 @@ public class ImmutableRichSObject implements RichSObject {
         @Override
         public Object getValue() {
             if (!record.containsKey(fieldName)) {
-                final String qualifiedFieldName = getParent().getMetadata().getName() + "." + fieldName;
                 if (!indexedFieldMetadata.containsKey(fieldName)) {
-                    throw new IllegalArgumentException("No such field: " + qualifiedFieldName);
+                    throw new IllegalArgumentException("No such field: " + fullyQualifiedName());
                 } else {
-                    throw new IllegalStateException("Field not queried or value not supplied: " + qualifiedFieldName);
+                    throw new IllegalStateException("Field not queried or value not supplied: " + fullyQualifiedName());
                 }
             }
 
             return record.get(fieldName);
         }
-        
+
+        private String fullyQualifiedName() {
+            return getParent().getMetadata().getName() + "." + fieldName;
+        }
+
         @Override
         public Object asAny() {
+            return asAny(ReferenceResolutionStrategies.UNRESOLVED);
+        }
+
+        @Override
+        public Object asAny(ReferenceResolutionStrategy strategy) {
             final String soapType = getMetadata().getSoapType();
 
-            if ("xsd:string".equals(soapType) || "tns:ID".equals(soapType)) {
+            if ("xsd:string".equals(soapType)) {
                 return asString();
             } else if ("xsd:boolean".equals(soapType)) {
                 return asBoolean();
@@ -132,6 +140,8 @@ public class ImmutableRichSObject implements RichSObject {
                 return asDate();
             } else if ("xsd:base64Binary".equals(soapType)) {
                 return asBytes();
+            } else if ("tns:ID".equals(soapType) && "reference".equals(getMetadata().getType())) {
+                return strategy.resolve(this);
             } else {
                 return getValue();
             }
@@ -193,10 +203,30 @@ public class ImmutableRichSObject implements RichSObject {
             }
 
             try {
-                return BASE_64_DECODER.decodeBuffer(service.getApiClient().getRawBase64Content(asString()));
+                if ("xsd:base64Binary".equals(getMetadata().getSoapType())) {
+                    return BASE_64_DECODER.decodeBuffer(service.getApiClient().getRawBase64Content(asString()));
+                } else {
+                    return BASE_64_DECODER.decodeBuffer(asString());
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        @Override
+        public RichSObject asRef() {
+            if (getValue() == null) {
+                return null;
+            }
+
+            final List<String> referenceTo = getMetadata().getReferenceTo();
+            if (referenceTo.isEmpty()) {
+                throw new IllegalArgumentException(fullyQualifiedName() + " does not reference entities");
+            } else if (referenceTo.size() > 1) {
+                throw new UnsupportedOperationException(fullyQualifiedName() + " references multiple entities, which is not yet supported");
+            }
+
+            return service.getSObject(referenceTo.get(0), asString());
         }
     }
 
@@ -206,4 +236,5 @@ public class ImmutableRichSObject implements RichSObject {
             return o1.getLabel().compareTo(o2.getLabel());
         }
     };
+
 }

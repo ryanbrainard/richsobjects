@@ -358,7 +358,7 @@ public class ForceApiProvider implements SfdcApiClientProvider {
                             return f.getRelationshipName();
                         }
 
-                        public List<String> getReferenceToEntity() {
+                        public List<String> getReferenceTo() {
                             return f.getReferenceToEntity();
                         }
 

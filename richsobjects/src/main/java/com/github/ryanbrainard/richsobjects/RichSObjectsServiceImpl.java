@@ -13,14 +13,9 @@ import java.util.*;
  */
 public class RichSObjectsServiceImpl implements RichSObjectsService {
 
-    private SfdcApiClient api;
-
     @Override
     public SfdcApiClient getApiClient() {
-        if (api == null) {
-            api = SfdcApiLoader.get(24.0);
-        }
-        return api;
+        return SfdcApiLoader.get(24.0);
     }
 
     @Override

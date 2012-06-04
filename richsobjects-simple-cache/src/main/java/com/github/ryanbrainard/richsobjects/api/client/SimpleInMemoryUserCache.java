@@ -11,7 +11,8 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-class SimpleInMemorySfdcApiClientCache implements SfdcApiCache {
+@SuppressWarnings("UnusedDeclaration")
+class SimpleInMemoryUserCache implements SfdcApiUserCache {
     
     private final SfdcApiClient api;
     private GlobalDescription cachedGlobalDescription;
@@ -19,13 +20,13 @@ class SimpleInMemorySfdcApiClientCache implements SfdcApiCache {
     private Map<String,SObjectDescription> cachedDescribeSObjectBasics;
     private Map<String, Map<String, ?>> cachedSObjects;
 
-    SimpleInMemorySfdcApiClientCache(SfdcApiClient api) {
+    SimpleInMemoryUserCache(SfdcApiClient api) {
         this.api = api;
-        clear();
+        invalidate();
     }
 
     @Override
-    public void clear() {
+    public void invalidate() {
         cachedGlobalDescription = null;
         cachedBasicSObjectInfos = new HashMap<String, BasicSObjectInformation>();
         cachedDescribeSObjectBasics = new HashMap<String, SObjectDescription>();

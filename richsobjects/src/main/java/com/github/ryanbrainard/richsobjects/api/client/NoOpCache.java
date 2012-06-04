@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class NoOpCache implements SfdcApiCache {
+public class NoOpCache implements SfdcApiUserCache {
 
     private final SfdcApiClient api;
 
@@ -69,7 +69,7 @@ public class NoOpCache implements SfdcApiCache {
     }
 
     @Override
-    public void clear() {
+    public void invalidate() {
         // no-op
     }
 }

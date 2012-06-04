@@ -225,7 +225,7 @@ class ImmutableRichSObject implements RichSObject {
             }
 
             final List<String> referenceTo = getMetadata().getReferenceTo();
-            if (referenceTo.isEmpty()) {
+            if (referenceTo == null || referenceTo.isEmpty()) {
                 throw new IllegalArgumentException(fullyQualifiedName() + " does not reference entities");
             } else if (referenceTo.size() > 1) {
                 throw new UnsupportedOperationException(fullyQualifiedName() + " references multiple entities, which is not yet supported");

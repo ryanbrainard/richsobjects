@@ -121,11 +121,16 @@ class ImmutableRichSObject implements RichSObject {
 
         @Override
         public Object asAny() {
-            return asAny(ReferenceResolutionStrategies.UNRESOLVED);
+            return _asAny(ReferenceResolutionStrategies.UNRESOLVED);
         }
 
+
         @Override
-        public Object asAny(ReferenceResolutionStrategy strategy) {
+        public Object asAnyWithNameRef() {
+            return _asAny(ReferenceResolutionStrategies.NAME_ONLY);
+        }
+
+        private Object _asAny(ReferenceResolutionStrategy strategy) {
             final String soapType = getMetadata().getSoapType();
 
             if ("xsd:string".equals(soapType)) {

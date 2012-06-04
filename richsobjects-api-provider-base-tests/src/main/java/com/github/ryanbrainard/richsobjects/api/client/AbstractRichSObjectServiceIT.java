@@ -10,9 +10,6 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
-import static com.github.ryanbrainard.richsobjects.ReferenceResolutionStrategies.FULLY;
-import static com.github.ryanbrainard.richsobjects.ReferenceResolutionStrategies.NAME_ONLY;
-import static com.github.ryanbrainard.richsobjects.ReferenceResolutionStrategies.UNRESOLVED;
 import static org.testng.Assert.*;
 
 /**
@@ -107,9 +104,8 @@ public abstract class AbstractRichSObjectServiceIT {
             put("lastName", "blah");
         }});
 
-        assertEquals(service.getSObject("Contact", conId).get("accountId").asAny(UNRESOLVED), acctId);
-        assertEquals(service.getSObject("Contact", conId).get("accountId").asAny(NAME_ONLY), acctName);
-        assertEquals(((RichSObject) service.getSObject("Contact", conId).get("accountId").asAny(FULLY)).get("annualRevenue").getValue(), annualRevenue);
+        assertEquals(service.getSObject("Contact", conId).get("accountId").asAny(), acctId);
+        assertEquals(service.getSObject("Contact", conId).get("accountId").asAnyWithNameRef(), acctName);
     }
 
     private void assertAsType(RichSObject.RichField field, Class<?> expectedRawType, Class<?> expectedConvertedType) {

@@ -26,7 +26,7 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
 
         Object asAny();
 
-        Object asAny(ReferenceResolutionStrategy strategy);
+        Object asAnyWithNameRef();
 
         String asString();
 

@@ -3,7 +3,7 @@ package com.github.ryanbrainard.richsobjects;
 /**
 * @author Ryan Brainard
 */
-public enum ReferenceResolutionStrategies implements ReferenceResolutionStrategy {
+enum ReferenceResolutionStrategies implements ReferenceResolutionStrategy {
 
     UNRESOLVED {
         @Override

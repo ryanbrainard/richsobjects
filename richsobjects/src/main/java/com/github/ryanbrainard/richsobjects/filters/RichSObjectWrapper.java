@@ -32,6 +32,11 @@ public abstract class RichSObjectWrapper implements RichSObject {
     }
 
     @Override
+    public boolean hasField(String fieldName) {
+        return wrapped.hasField(fieldName);
+    }
+
+    @Override
     public Iterator<RichField> iterator() {
         return wrapped.getFields();
     }

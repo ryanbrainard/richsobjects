@@ -16,6 +16,8 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
 
     Iterator<RichField> getFields();
 
+    boolean hasField(String fieldName);
+
     public interface RichField {
 
         RichSObject getParent();

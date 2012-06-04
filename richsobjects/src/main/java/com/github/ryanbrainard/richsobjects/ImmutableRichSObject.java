@@ -53,6 +53,11 @@ class ImmutableRichSObject implements RichSObject {
     }
 
     @Override
+    public boolean hasField(String fieldName) {
+        return indexedFieldMetadata.containsKey(fieldName);
+    }
+
+    @Override
     public RichField get(String fieldName) {
         return new ImmutableRichField(fieldName.toUpperCase());
     }
@@ -104,12 +109,8 @@ class ImmutableRichSObject implements RichSObject {
 
         @Override
         public Object getValue() {
-            if (!record.containsKey(fieldName)) {
-                if (!indexedFieldMetadata.containsKey(fieldName)) {
-                    throw new IllegalArgumentException("No such field: " + fullyQualifiedName());
-                } else {
-                    throw new IllegalStateException("Field not queried or value not supplied: " + fullyQualifiedName());
-                }
+            if (!indexedFieldMetadata.containsKey(fieldName)) {
+                throw new IllegalArgumentException("No such field: " + fullyQualifiedName());
             }
 
             return record.get(fieldName);
@@ -131,6 +132,10 @@ class ImmutableRichSObject implements RichSObject {
         }
 
         private Object _asAny(ReferenceResolutionStrategy strategy) {
+            if (getValue() == null) {
+                return null;
+            }
+            
             final String soapType = getMetadata().getSoapType();
 
             if ("xsd:string".equals(soapType)) {

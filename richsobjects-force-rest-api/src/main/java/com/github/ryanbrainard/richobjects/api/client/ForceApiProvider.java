@@ -104,6 +104,11 @@ public class ForceApiProvider implements SfdcApiClientProvider {
             public QueryResult queryMore(String nextRecordsUrl) {
                 return toQueryResult(api.queryMore(nextRecordsUrl));
             }
+
+            @Override
+            public String getRawBase64Content(String contentUrl) {
+                throw new UnsupportedOperationException();
+            }
         };
     }
 

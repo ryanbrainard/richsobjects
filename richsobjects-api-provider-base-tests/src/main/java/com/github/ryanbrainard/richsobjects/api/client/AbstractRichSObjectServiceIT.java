@@ -1,10 +1,10 @@
 package com.github.ryanbrainard.richsobjects.api.client;
 
 import com.github.ryanbrainard.richsobjects.RichSObject;
+import com.github.ryanbrainard.richsobjects.RichSObjectsService;
+import com.github.ryanbrainard.richsobjects.RichSObjectsServiceImpl;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
-import com.github.ryanbrainard.richsobjects.service.RichSObjectsService;
-import com.github.ryanbrainard.richsobjects.service.RichSObjectsServiceImpl;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -81,13 +81,14 @@ public abstract class AbstractRichSObjectServiceIT {
 
     @Test
     public void testAsTypes() throws Exception {
-        final RichSObject acct = service.query("SELECT Id, Name, CreatedDate, IsClosed, Amount FROM Opportunity WHERE Amount != null LIMIT 1").next();
+        final RichSObject acct = service.query("SELECT AuthorId,Body,BodyLength,CreatedDate,Name,IsDeleted FROM Document LIMIT 1").next();
 
-        assertAsType(acct.get("id"), String.class, String.class);
-        assertAsType(acct.get("name"), String.class, String.class);
-        assertAsType(acct.get("createdDate"), String.class, Date.class);
-        assertAsType(acct.get("isClosed"), Boolean.class, Boolean.class);
-        assertAsType(acct.get("amount"), Double.class, Double.class);
+        assertAsType(acct.get("AuthorId"), String.class, String.class);
+        assertAsType(acct.get("Name"), String.class, String.class);
+        assertAsType(acct.get("CreatedDate"), String.class, Date.class);
+        assertAsType(acct.get("IsDeleted"), Boolean.class, Boolean.class);
+        assertAsType(acct.get("BodyLength"), Integer.class, Integer.class);
+        assertAsType(acct.get("Body"), String.class, byte[].class);
     }
 
     private void assertAsType(RichSObject.RichField field, Class<?> expectedRawType, Class<?> expectedConvertedType) {

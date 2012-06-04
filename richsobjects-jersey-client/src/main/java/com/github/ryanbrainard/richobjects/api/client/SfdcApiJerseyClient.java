@@ -84,4 +84,9 @@ public class SfdcApiJerseyClient implements SfdcApiClient {
     public QueryResult queryMore(String nextRecordsUrl) {
         return baseResource.path(nextRecordsUrl).get(QueryResult.class);
     }
+
+    @Override
+    public String getRawBase64Content(String contentUrl) {
+        return baseResource.path(contentUrl).get(String.class);
+    }
 }

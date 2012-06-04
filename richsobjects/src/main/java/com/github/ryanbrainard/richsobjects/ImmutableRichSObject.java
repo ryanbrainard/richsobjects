@@ -3,6 +3,7 @@ package com.github.ryanbrainard.richsobjects;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import sun.misc.BASE64Decoder;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -15,16 +16,18 @@ public class ImmutableRichSObject implements RichSObject {
     private static final BASE64Decoder BASE_64_DECODER = new BASE64Decoder();
     private static final SimpleDateFormat API_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
+    private final transient RichSObjectsService service;
     private final SObjectDescription metadata;
     private final Map<String, Object> record;
     private final Map<String, SObjectDescription.Field> indexedFieldMetadata;
     private final List<SObjectDescription.Field> sortedFieldMetadata;
 
-    public ImmutableRichSObject(SObjectDescription metadata, Map<String, ?> record) {
-        this(metadata, record, ORDER_BY_FIELD_LABEL);
+    ImmutableRichSObject(RichSObjectsService service, SObjectDescription metadata, Map<String, ?> record) {
+        this(service, metadata, record, ORDER_BY_FIELD_LABEL);
     }
 
-    public ImmutableRichSObject(SObjectDescription metadata, Map<String, ?> record, Comparator<SObjectDescription.Field> sortFieldsBy) {
+    ImmutableRichSObject(RichSObjectsService service, SObjectDescription metadata, Map<String, ?> record, Comparator<SObjectDescription.Field> sortFieldsBy) {
+        this.service = service;
         this.metadata = metadata;
 
         final Map<String, Object> tmpRecord = new HashMap<String, Object>(record.size());
@@ -185,7 +188,15 @@ public class ImmutableRichSObject implements RichSObject {
 
         @Override
         public byte[] asBytes() {
-            throw new UnsupportedOperationException(); // TODO
+            if (getValue() == null) {
+                return new byte[0];
+            }
+
+            try {
+                return BASE_64_DECODER.decodeBuffer(service.getApiClient().getRawBase64Content(asString()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

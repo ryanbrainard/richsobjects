@@ -29,4 +29,6 @@ public interface SfdcApiClient {
     QueryResult query(String soql);
 
     QueryResult queryMore(String nextRecordsUrl);
+
+    String getRawBase64Content(String contentUrl);
 }

@@ -1,7 +1,7 @@
-package com.github.ryanbrainard.richsobjects.service;
+package com.github.ryanbrainard.richsobjects;
 
 
-import com.github.ryanbrainard.richsobjects.RichSObject;
+import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
@@ -34,4 +34,5 @@ public interface RichSObjectsService {
 
     Iterator<RichSObject> query(String soql);
 
+    SfdcApiClient getApiClient();
 }

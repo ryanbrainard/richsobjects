@@ -1,7 +1,5 @@
-package com.github.ryanbrainard.richsobjects.service;
+package com.github.ryanbrainard.richsobjects;
 
-import com.github.ryanbrainard.richsobjects.ImmutableRichSObject;
-import com.github.ryanbrainard.richsobjects.RichSObject;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcApiClient;
 import com.github.ryanbrainard.richsobjects.api.client.SfdcApiLoader;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
@@ -15,7 +13,8 @@ import java.util.*;
  */
 public class RichSObjectsServiceImpl implements RichSObjectsService {
 
-    protected SfdcApiClient getApiClient() {
+    @Override
+    public SfdcApiClient getApiClient() {
         return SfdcApiLoader.get(24.0);
     }
 
@@ -39,12 +38,12 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
     @Override
     public RichSObject newSObject(String type) {
         //noinspection unchecked
-        return new ImmutableRichSObject(describeSObjectType(type), Collections.EMPTY_MAP);
+        return new ImmutableRichSObject(this, describeSObjectType(type), Collections.EMPTY_MAP);
     }
 
     @Override
     public RichSObject existingSObject(String type, Map<String, ?> record) {
-        return new ImmutableRichSObject(describeSObjectType(type), record);
+        return new ImmutableRichSObject(this, describeSObjectType(type), record);
     }
     
     @Override
@@ -64,7 +63,7 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
 
     @Override
     public RichSObject getSObject(String type, String id) {
-        return new ImmutableRichSObject(describeSObjectType(type), getRawSObject(type, id));
+        return new ImmutableRichSObject(this, describeSObjectType(type), getRawSObject(type, id));
     }
 
     private Map<String, ?> getRawSObject(String sobject, String id) {
@@ -84,7 +83,7 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
 
             @Override
             public RichSObject next() {
-                return new ImmutableRichSObject(metadata, rawRecentItems.next());
+                return new ImmutableRichSObject(RichSObjectsServiceImpl.this, metadata, rawRecentItems.next());
             }
 
             @Override
@@ -111,7 +110,7 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
             @Override
             public RichSObject next() {
                 if (queryResultItr.hasNext()) {
-                    return new ImmutableRichSObject(metadata, queryResultItr.next());
+                    return new ImmutableRichSObject(RichSObjectsServiceImpl.this, metadata, queryResultItr.next());
                 } else if (!queryResult.isDone()) {
                     queryResult = getApiClient().queryMore(queryResult.getNextRecordsUrl());
                     queryResultItr = queryResult.getRecords().iterator();

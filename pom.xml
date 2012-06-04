@@ -4,10 +4,60 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <groupId>com.github.ryanbrainard</groupId>
     <artifactId>richsobjects-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1-BETA-SNAPSHOT</version>
+
+    <description>A higher-level, modular library for interacting with the Salesforce API.</description>
+
+    <url>https://github.com/ryanbrainard/richsobjects</url>
+
+    <developers>
+        <developer>
+            <id>ryanbrainard</id>
+            <name>Ryan Brainard</name>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://raw.github.com/ryanbrainard/richsobjects/master/LICENSE.md</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>http://github.com/ryanbrainard/richsobjects.git</url>
+        <connection>scm:git:git@github.com:ryanbrainard/richsobjects.git</connection>
+        <developerConnection>scm:git:git@github.com:ryanbrainard/richsobjects.git</developerConnection>
+    </scm>
+
+    <mailingLists>
+        <mailingList>
+            <name>richsobjects Issues</name>
+            <archive>https://github.com/ryanbrainard/richsobjects/issues?state=closed</archive>
+            <subscribe>https://github.com/ryanbrainard/richsobjects/toggle_watch</subscribe>
+            <unsubscribe>https://github.com/ryanbrainard/richsobjects/toggle_watch</unsubscribe>
+            <post>https://github.com/ryanbrainard/richsobjects/issues/new</post>
+        </mailingList>
+    </mailingLists>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/ryanbrainard/richsobjects/issues/new</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <modules>
         <module>richsobjects</module>
@@ -17,10 +67,6 @@
         <module>richsobjects-api-provider-interfaces</module>
         <module>richsobjects-simple-cache</module>
     </modules>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -67,11 +113,55 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>com.github.ryanbrainard.repo</id>
-            <name>ryanbrainard github repo</name>
-            <url>file:///Users/brainard/Development/repo</url>
-        </repository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>prepare-for-central</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.1.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <!--suppress MavenModelInspection -->
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <!--suppress MavenModelInspection -->
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

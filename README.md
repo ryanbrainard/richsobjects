@@ -20,7 +20,7 @@ Add to your `pom.xml`
         <!-- REQUIRED: Core Libraries -->
         <dependency>
             <groupId>com.github.ryanbrainard</groupId>
-            <artifactId>richsobjects</artifactId>
+            <artifactId>richsobjects-core</artifactId>
             <version>${richsobjects.version}</version>
         </dependency>
 

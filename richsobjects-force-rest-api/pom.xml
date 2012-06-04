@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>richsobjects-parent</artifactId>
+        <artifactId>richsobjects</artifactId>
         <groupId>com.github.ryanbrainard</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1-BETA-SNAPSHOT</version>
     </parent>
 
     <artifactId>richsobjects-force-rest-api</artifactId>

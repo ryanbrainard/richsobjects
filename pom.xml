@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>com.github.ryanbrainard</groupId>
-    <artifactId>richsobjects-parent</artifactId>
+    <artifactId>richsobjects</artifactId>
     <packaging>pom</packaging>
     <version>0.1-BETA-SNAPSHOT</version>
 
@@ -60,8 +60,8 @@
     </properties>
 
     <modules>
-        <module>richsobjects</module>
-        <module>richsobjects-force-rest-api</module>
+        <module>richsobjects-core</module>
+        <!--<module>richsobjects-force-rest-api</module>-->
         <module>richsobjects-jersey-client</module>
         <module>richsobjects-api-provider-base-tests</module>
         <module>richsobjects-api-provider-interfaces</module>
@@ -71,7 +71,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <artifactId>richsobjects</artifactId>
+                <artifactId>richsobjects-core</artifactId>
                 <groupId>com.github.ryanbrainard</groupId>
                 <version>${project.version}</version>
             </dependency>
@@ -126,7 +126,7 @@
                             <execution>
                                 <id>attach-sources</id>
                                 <goals>
-                                    <goal>jar</goal>
+                                    <goal>jar-no-fork</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -139,7 +139,6 @@
                             <execution>
                                 <id>attach-javadocs</id>
                                 <goals>
-                                    <!--suppress MavenModelInspection -->
                                     <goal>jar</goal>
                                 </goals>
                             </execution>

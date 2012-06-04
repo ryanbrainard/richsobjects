@@ -13,9 +13,14 @@ import java.util.*;
  */
 public class RichSObjectsServiceImpl implements RichSObjectsService {
 
+    private SfdcApiClient api;
+
     @Override
     public SfdcApiClient getApiClient() {
-        return SfdcApiLoader.get(24.0);
+        if (api == null) {
+            api = SfdcApiLoader.get(24.0);
+        }
+        return api;
     }
 
     @Override
@@ -37,8 +42,11 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
 
     @Override
     public RichSObject newSObject(String type) {
-        //noinspection unchecked
-        return new ImmutableRichSObject(this, describeSObjectType(type), Collections.EMPTY_MAP);
+        final Map<String,?> emptySObject = new HashMap<String, Object>();
+        for (SObjectDescription.Field f : describeSObjectType(type).getFields()) {
+            emptySObject.put(f.getName(), null);
+        }
+        return new ImmutableRichSObject(this, describeSObjectType(type), emptySObject);
     }
 
     @Override

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Stateful layer of API services for one API user. Do not share between orgs or users.
+ *
  * @author Ryan Brainard
  */
 public interface RichSObjectsService {

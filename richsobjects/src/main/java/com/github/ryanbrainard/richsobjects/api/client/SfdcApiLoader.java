@@ -18,17 +18,33 @@ public class SfdcApiLoader {
             SfdcApiClientProvider.class,
             SfdcApiLoader.class.getClassLoader());
 
+    private static final ServiceLoader<SfdcApiCacheProvider> cacheLoader = ServiceLoader.load(
+            SfdcApiCacheProvider.class,
+            SfdcApiLoader.class.getClassLoader());
+    
     public static SfdcApiClient get(double version) {
         final SfdcApiSessionProvider sessionProvider = getFirstOrThrow(sessionLoader);
         final SfdcApiClientProvider clientProvider = getFirstOrThrow(clientLoader);
+        final SfdcApiCacheProvider cacheProvider = getFirstOrElse(cacheLoader, DEFAULT_CACHE_PROVIDER);
 
-        return clientProvider.get(
-                sessionProvider.getAccessToken(),
-                sessionProvider.getApiEndpoint(),
-                String.format("v%.1f", version));
-
+        return cacheProvider.get(
+                clientProvider.get(
+                        sessionProvider.getAccessToken(),
+                        sessionProvider.getApiEndpoint(),
+                        String.format("v%.1f", version)
+                )
+        );
     }
 
+    private static <S> S getFirstOrElse(ServiceLoader<S> loader, S defaultProvider) {
+        final Iterator<S> providerIterator = loader.iterator();
+        if (providerIterator.hasNext()) {
+            return providerIterator.next();
+        } else {
+            return defaultProvider;
+        }
+    }
+    
     private static <S> S getFirstOrThrow(ServiceLoader<S> loader) {
         final Iterator<S> providerIterator = loader.iterator();
         if (!providerIterator.hasNext()) {
@@ -38,4 +54,11 @@ public class SfdcApiLoader {
         }
         return providerIterator.next();
     }
+
+    private static final SfdcApiCacheProvider DEFAULT_CACHE_PROVIDER = new SfdcApiCacheProvider() {
+        @Override
+        public SfdcApiCache get(SfdcApiClient apiClient) {
+            return new SimpleInMemorySfdcApiClientCache(apiClient);
+        }
+    };
 }

@@ -5,7 +5,6 @@ import com.github.ryanbrainard.richsobjects.api.model.GlobalDescription;
 import com.github.ryanbrainard.richsobjects.api.model.QueryResult;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,7 +16,7 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
     private final SfdcApiClient api;
     private GlobalDescription cachedGlobalDescription;
     private Map<String,BasicSObjectInformation> cachedBasicSObjectInfos;
-    private Map<String,SObjectDescription> cachedDescribeSObjectBasics;
+    private Map<String,SObjectDescription> cachedSObjectDescriptions;
     private Map<String, Map<String, ?>> cachedSObjects;
 
     SimpleInMemoryUserCache(SfdcApiClient api) {
@@ -28,9 +27,9 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
     @Override
     public void invalidate() {
         cachedGlobalDescription = null;
-        cachedBasicSObjectInfos = new HashMap<String, BasicSObjectInformation>();
-        cachedDescribeSObjectBasics = new HashMap<String, SObjectDescription>();
-        cachedSObjects = new HashMap<String, Map<String, ?>>();
+        cachedBasicSObjectInfos = LruMap.newSync(5);
+        cachedSObjectDescriptions = LruMap.newSync(5);
+        cachedSObjects = LruMap.newSync(10);
     }
 
     public GlobalDescription describeGlobal() {
@@ -53,11 +52,11 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
     }
 
     public SObjectDescription describeSObject(String type) {
-        if (cachedDescribeSObjectBasics.containsKey(type)) {
-            return cachedDescribeSObjectBasics.get(type);
+        if (cachedSObjectDescriptions.containsKey(type)) {
+            return cachedSObjectDescriptions.get(type);
         } else {
             final SObjectDescription value = api.describeSObject(type);
-            cachedDescribeSObjectBasics.put(type, value);
+            cachedSObjectDescriptions.put(type, value);
             return value;
         }
     }

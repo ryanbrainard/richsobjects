@@ -1,9 +1,6 @@
 package com.github.ryanbrainard.richsobjects.api.client;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 
 /**
  * @author Ryan Brainard
@@ -12,7 +9,7 @@ public class SimpleInMemoryMultiUserCacheLoader implements SfdcApiCacheLoaderPro
 
     private static final ServiceLoader<SfdcApiUserCacheProvider> userCacheLoader = ServiceLoader.load(SfdcApiUserCacheProvider.class);
 
-    private static Map<String, SfdcApiUserCache> allCaches = new HashMap<String, SfdcApiUserCache>();
+    private static Map<String, SfdcApiUserCache> allCaches = LruMap.newSync(5);
     
     @Override
     public SfdcApiUserCache get(String key, SfdcApiClient apiClient) {

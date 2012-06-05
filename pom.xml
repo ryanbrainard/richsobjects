@@ -11,7 +11,7 @@
     <groupId>com.github.ryanbrainard</groupId>
     <artifactId>richsobjects</artifactId>
     <packaging>pom</packaging>
-    <version>0.1-BETA</version>
+    <version>0.2-BETA-SNAPSHOT</version>
 
     <description>A higher-level, modular library for interacting with the Salesforce API.</description>
 

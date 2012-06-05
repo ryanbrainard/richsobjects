@@ -7,11 +7,22 @@ public class SfdcApiTestSessionProvider implements SfdcApiSessionProvider {
     
     @Override
     public String getAccessToken() {
-        return System.getProperty("sfdc.test.sessionId");
+        return getSystemPropertyOrEnvVar("sfdc.test.sessionId", "SFDC_TEST_SESSION_ID");
     }
 
     @Override
     public String getApiEndpoint() {
-        return System.getProperty("sfdc.test.endpoint");
+        return getSystemPropertyOrEnvVar("sfdc.test.endpoint", "SFDC_TEST_ENDPOINT");
+    }
+
+    private static String getSystemPropertyOrEnvVar(String systemProperty, String envVar) {
+        if (System.getProperties().containsKey(systemProperty)) {
+            return  System.getProperty(systemProperty);
+        } else if (System.getenv().containsKey(envVar)) {
+            return System.getenv(envVar);
+        } else {
+            throw new RuntimeException("Could not log system property [" + systemProperty + "]" +
+                    " or environment variable [" + envVar + "]");
+        }
     }
 }

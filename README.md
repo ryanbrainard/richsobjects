@@ -42,7 +42,7 @@ Implement `com.github.ryanbrainard.richsobjects.api.client.SfdcApiSessionProvide
 to tell RichSObjects how to get session info from your app. Then put the fully-qualified name of your class in a file named
 `/META-INF/services/com.github.ryanbrainard.richsobjects.api.client.SfdcApiSessionProvider`
 
-Example usage:
+##Example Usage
 
     // Initialize the service
     RichSObjectsService service = new RichSObjectsServiceImpl();

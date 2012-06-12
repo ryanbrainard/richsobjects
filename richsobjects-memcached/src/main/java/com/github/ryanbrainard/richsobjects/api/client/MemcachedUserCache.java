@@ -24,8 +24,8 @@ public class MemcachedUserCache implements SfdcApiUserCache {
 
     static {
         AuthDescriptor ad = new AuthDescriptor(new String[]{"PLAIN"}, new PlainCallbackHandler(
-                System.getenv("MEMCACHE_USERNAME"),
-                System.getenv("MEMCACHE_PASSWORD")));
+                getEnvOrThrow("MEMCACHE_USERNAME"),
+                getEnvOrThrow("MEMCACHE_PASSWORD")));
         ConnectionFactoryBuilder factoryBuilder = new ConnectionFactoryBuilder();
         ConnectionFactory cf = factoryBuilder
                 .setProtocol(ConnectionFactoryBuilder.Protocol.BINARY)
@@ -33,10 +33,18 @@ public class MemcachedUserCache implements SfdcApiUserCache {
                 .build();
 
         try {
-            memcachedClient = new MemcachedClient(cf, Collections.singletonList(new InetSocketAddress(System.getenv("MEMCACHE_SERVERS"), 11211)));
+            memcachedClient = new MemcachedClient(cf, Collections.singletonList(new InetSocketAddress(getEnvOrThrow("MEMCACHE_SERVERS"), 11211)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String getEnvOrThrow(String name) {
+        final String value = System.getenv(name);
+        if (value == null) {
+            throw new NullPointerException("[" + name + "] is must not be null");
+        }
+        return value;
     }
 
     private final String userKey;

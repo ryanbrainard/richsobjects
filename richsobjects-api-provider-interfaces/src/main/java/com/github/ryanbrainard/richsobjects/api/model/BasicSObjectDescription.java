@@ -1,11 +1,12 @@
 package com.github.ryanbrainard.richsobjects.api.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author Ryan Brainard
  */
-public interface BasicSObjectDescription {
+public interface BasicSObjectDescription extends Serializable{
 
     String getName();
 

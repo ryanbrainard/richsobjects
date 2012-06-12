@@ -64,6 +64,7 @@
         <module>richsobjects-api-provider-base-tests</module>
         <module>richsobjects-api-provider-interfaces</module>
         <module>richsobjects-simple-cache</module>
+        <module>richsobjects-memcached</module>
     </modules>
 
     <dependencyManagement>

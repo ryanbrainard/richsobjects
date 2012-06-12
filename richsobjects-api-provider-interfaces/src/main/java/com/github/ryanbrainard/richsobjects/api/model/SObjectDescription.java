@@ -1,5 +1,6 @@
 package com.github.ryanbrainard.richsobjects.api.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ public interface SObjectDescription extends BasicSObjectDescription {
 
     List<? extends ChildEntity> getChildRelationships();
 
-    static interface Field {
+    static interface Field extends Serializable {
         Integer getLength();
 
         String getName();
@@ -73,7 +74,7 @@ public interface SObjectDescription extends BasicSObjectDescription {
         Boolean isSortable();
     }
 
-    static interface ChildEntity {
+    static interface ChildEntity extends Serializable {
         String getField();
 
         String getChildSObject();

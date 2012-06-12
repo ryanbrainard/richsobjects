@@ -33,6 +33,8 @@
             <artifactId>richsobjects-api-provider-interfaces</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
+
+        <!-- TEST ONLY -->
         <dependency>
             <artifactId>richsobjects-api-provider-base-tests</artifactId>
             <groupId>com.github.ryanbrainard</groupId>

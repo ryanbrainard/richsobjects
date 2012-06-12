@@ -29,7 +29,7 @@ public class MemcachedUserCache implements SfdcApiUserCache {
         ConnectionFactoryBuilder factoryBuilder = new ConnectionFactoryBuilder();
         ConnectionFactory cf = factoryBuilder
                 .setProtocol(ConnectionFactoryBuilder.Protocol.BINARY)
-                .setAuthDescriptor(ad).setTranscoder(new SerializingTranscoderWithRegisteredClassLoaders())
+                .setAuthDescriptor(ad).setTranscoder(new ClassLoaderRegisteringSerializingTranscoder())
                 .build();
 
         try {
@@ -59,7 +59,6 @@ public class MemcachedUserCache implements SfdcApiUserCache {
             return (T) fromCache;
         } else {
             final T fromProvider = provider.get();
-            ObjectInputStreamWithRegisteredClassLoaders.register(fromProvider.getClass());
             memcachedClient.set(fullyQualifiedKey(entityKey), 5 * 60, fromProvider);
             return fromProvider;
         }

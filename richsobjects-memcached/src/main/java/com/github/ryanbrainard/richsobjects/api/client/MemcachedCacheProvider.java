@@ -8,44 +8,46 @@ import net.spy.memcached.auth.PlainCallbackHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * @author Ryan Brainard
  */
 public class MemcachedCacheProvider implements SfdcApiCacheProvider {
 
-    private static final MemcachedClient memcached;
+    private static final MemcachedClient memcached = initClient();
 
-    static {
-        AuthDescriptor ad = new AuthDescriptor(new String[]{"PLAIN"}, new PlainCallbackHandler(
-                getEnvOrThrow("MEMCACHE_USERNAME"),
-                getEnvOrThrow("MEMCACHE_PASSWORD")));
-        ConnectionFactoryBuilder factoryBuilder = new ConnectionFactoryBuilder();
-        ConnectionFactory cf = factoryBuilder
-                .setProtocol(ConnectionFactoryBuilder.Protocol.BINARY)
-                .setAuthDescriptor(ad).setTranscoder(new ClassLoaderRegisteringSerializingTranscoder())
+    private static MemcachedClient initClient() {
+        final String username = System.getenv("MEMCACHE_USERNAME");
+        final String password = System.getenv("MEMCACHE_PASSWORD");
+        final String servers  = System.getenv("MEMCACHE_SERVERS");
+        
+        if (username == null || password == null || servers == null) {
+            System.err.println("WARNING: Memcached is not configured properly and will not be used for caching Rich SObjects. " +
+                               "Be sure to set environment variables for MEMCACHE_USERNAME, MEMCACHE_PASSWORD, MEMCACHE_SERVERS.");
+            return null;
+        }
+        
+        final AuthDescriptor ad = new AuthDescriptor(new String[]{"PLAIN"}, new PlainCallbackHandler(username,password));
+        final ConnectionFactoryBuilder factoryBuilder = new ConnectionFactoryBuilder();
+        final ConnectionFactory cf = factoryBuilder.setProtocol(ConnectionFactoryBuilder.Protocol.BINARY)
+                .setAuthDescriptor(ad)
+                .setTranscoder(new ClassLoaderRegisteringSerializingTranscoder())
                 .build();
 
         try {
-            memcached = new MemcachedClient(cf, Collections.singletonList(
-                    new InetSocketAddress(getEnvOrThrow("MEMCACHE_SERVERS"), 11211)));
+            return new MemcachedClient(cf, Arrays.asList(new InetSocketAddress(servers, 11211)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static String getEnvOrThrow(String name) {
-        final String value = System.getenv(name);
-        if (value == null) {
-            throw new NullPointerException("[" + name + "] is must not be null");
-        }
-        return value;
-    }
-
-
     @Override
     public SfdcApiClient get(String key, SfdcApiClient apiClient) {
-        return new MemcachedUserCache(memcached, key, apiClient);
+        if (memcached != null) {
+            return new MemcachedUserCache(memcached, key, apiClient);
+        } else {
+            return apiClient;
+        }
     }
 }

@@ -1,12 +1,13 @@
 package com.github.ryanbrainard.richsobjects.api.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Ryan Brainard
  */
-public interface QueryResult {
+public interface QueryResult extends Serializable {
 
     public int getTotalSize();
 

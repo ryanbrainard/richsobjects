@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Ryan Brainard
  */
-public interface SObjectDescription extends BasicSObjectDescription {
+public interface SObjectDescription extends BasicSObjectDescription, Serializable {
 
     List<? extends Field> getFields();
 

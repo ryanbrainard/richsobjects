@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public interface BasicSObjectDescription extends Serializable{
+public interface BasicSObjectDescription extends Serializable {
 
     String getName();
 

@@ -48,9 +48,4 @@ public class MemcachedCacheLoader implements SfdcApiCacheLoaderProvider {
     public SfdcApiUserCache get(String key, SfdcApiClient apiClient) {
         return new MemcachedUserCache(memcached, key, apiClient);
     }
-
-    @Override
-    public void invalidate() {
-        throw new UnsupportedOperationException(); // TODO
-    }
 }

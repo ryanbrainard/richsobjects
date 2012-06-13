@@ -29,10 +29,4 @@ public class SimpleInMemoryMultiUserCacheLoader implements SfdcApiCacheLoaderPro
             return cache;
         }
     }
-
-    @Override
-    public void invalidate() {
-        allCaches.clear();
-    }
-
 }

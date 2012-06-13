@@ -56,10 +56,5 @@ public class SfdcApiLoader {
         public SfdcApiUserCache get(String key, SfdcApiClient apiClient) {
             return new NoOpCache(apiClient);
         }
-
-        @Override
-        public void invalidate() {
-            // no-op
-        }
     };
 }

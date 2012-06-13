@@ -1,1 +1,1 @@
-com.github.ryanbrainard.richsobjects.api.client.MemcachedCacheLoader
+com.github.ryanbrainard.richsobjects.api.client.MemcachedCacheProvider

@@ -12,14 +12,14 @@ public class SfdcApiLoader {
 
     private static final ServiceLoader<SfdcApiSessionProvider> sessionLoader = loadProvider(SfdcApiSessionProvider.class);
     private static final ServiceLoader<SfdcApiClientProvider> clientLoader = loadProvider(SfdcApiClientProvider.class);
-    private static final ServiceLoader<SfdcApiCacheLoaderProvider> cacheLoader = loadProvider(SfdcApiCacheLoaderProvider.class);
+    private static final ServiceLoader<SfdcApiCacheProvider> cacheLoader = loadProvider(SfdcApiCacheProvider.class);
     
     public static SfdcApiClient get(double version) {
         final SfdcApiSessionProvider sessionProvider = getFirstOrThrow(sessionLoader);
         final SfdcApiClientProvider clientProvider = getFirstOrThrow(clientLoader);
-        final SfdcApiCacheLoaderProvider cacheLoaderProvider = getFirstOrElse(cacheLoader, DEFAULT_CACHE_LOADER_PROVIDER);
+        final SfdcApiCacheProvider cacheProvider = getFirstOrElse(cacheLoader, DEFAULT_CACHE_PROVIDER);
 
-        return cacheLoaderProvider.get(
+        return cacheProvider.get(
                 sessionProvider.getAccessToken() + version,
                 clientProvider.get(
                         sessionProvider.getAccessToken(),
@@ -51,7 +51,7 @@ public class SfdcApiLoader {
         return providerIterator.next();
     }
 
-    private static final SfdcApiCacheLoaderProvider DEFAULT_CACHE_LOADER_PROVIDER = new SfdcApiCacheLoaderProvider() {
+    private static final SfdcApiCacheProvider DEFAULT_CACHE_PROVIDER = new SfdcApiCacheProvider() {
         @Override
         public SfdcApiUserCache get(String key, SfdcApiClient apiClient) {
             return new NoOpCache(apiClient);

@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * @author Ryan Brainard
  */
-public class SimpleInMemoryCacheLoader implements SfdcApiCacheLoaderProvider {
+public class SimpleInMemoryCacheProvider implements SfdcApiCacheProvider {
 
     private static Map<String, SfdcApiUserCache> allCaches = LruMap.newSync(5);
     

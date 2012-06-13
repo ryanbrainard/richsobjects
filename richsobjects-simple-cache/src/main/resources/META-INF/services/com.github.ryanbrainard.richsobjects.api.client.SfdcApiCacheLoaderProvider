@@ -1,1 +1,1 @@
-com.github.ryanbrainard.richsobjects.api.client.SimpleInMemoryCacheLoader
+com.github.ryanbrainard.richsobjects.api.client.SimpleInMemoryCacheProvider

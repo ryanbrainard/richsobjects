@@ -3,6 +3,6 @@ package com.github.ryanbrainard.richsobjects.api.client;
 /**
  * @author Ryan Brainard
  */
-public interface SfdcApiCacheLoaderProvider {
+public interface SfdcApiCacheProvider {
     SfdcApiUserCache get(String key, SfdcApiClient apiClient);
 }

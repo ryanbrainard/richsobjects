@@ -13,7 +13,7 @@ import java.util.Collections;
 /**
  * @author Ryan Brainard
  */
-public class MemcachedCacheLoader implements SfdcApiCacheLoaderProvider {
+public class MemcachedCacheProvider implements SfdcApiCacheProvider {
 
     private static final MemcachedClient memcached;
 

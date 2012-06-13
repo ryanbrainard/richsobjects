@@ -15,7 +15,6 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
     
     private final SfdcApiClient api;
     private GlobalDescription cachedGlobalDescription;
-    private Map<String,BasicSObjectInformation> cachedBasicSObjectInfos;
     private Map<String,SObjectDescription> cachedSObjectDescriptions;
     private Map<String, Map<String, ?>> cachedSObjects;
 
@@ -27,7 +26,6 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
     @Override
     public void invalidate() {
         cachedGlobalDescription = null;
-        cachedBasicSObjectInfos = LruMap.newSync(5);
         cachedSObjectDescriptions = LruMap.newSync(5);
         cachedSObjects = LruMap.newSync(10);
     }
@@ -42,13 +40,7 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
     }
 
     public BasicSObjectInformation describeSObjectBasic(String type) {
-        if (cachedBasicSObjectInfos.containsKey(type)) {
-            return cachedBasicSObjectInfos.get(type);
-        } else {
-            final BasicSObjectInformation value = api.describeSObjectBasic(type);
-            cachedBasicSObjectInfos.put(type, value);
-            return value;
-        }
+        return api.describeSObjectBasic(type);
     }
 
     public SObjectDescription describeSObject(String type) {
@@ -62,18 +54,15 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
     }
 
     public String createSObject(String type, Map<String, ?> record) {
-        cachedBasicSObjectInfos.remove(type);
         return api.createSObject(type, record);
     }
 
     public void updateSObject(String type, String id, Map<String, ?> record) {
-        cachedBasicSObjectInfos.remove(type);
         cachedSObjects.remove(id);
         api.updateSObject(type, id, record);
     }
 
     public void deleteSObject(String type, String id) {
-        cachedBasicSObjectInfos.remove(type);
         cachedSObjects.remove(id);
         api.deleteSObject(type, id);
     }

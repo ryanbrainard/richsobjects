@@ -11,6 +11,7 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.util.Map;
 
@@ -19,74 +20,74 @@ import java.util.Map;
  */
 public class SfdcApiJerseyClient implements SfdcApiClient {
 
+    private final String accessToken;
     private final WebResource baseResource;
     private final WebResource versionedDateResource;
     private final WebResource sobjectsResource;
 
-    SfdcApiJerseyClient(String accessToken, String apiEndpoint, String version){
-        final ClientConfig config = new DefaultClientConfig();
-        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-        config.getClasses().add(ObjectMapperProvider.class);
-
-        final Client jerseyClient = Client.create(config);
-        jerseyClient.addFilter(new AuthorizationHeaderFilter(accessToken));
-        baseResource = jerseyClient.resource(apiEndpoint);
-        versionedDateResource = jerseyClient.resource(apiEndpoint + "/services/data/" + version);
+    SfdcApiJerseyClient(Client pooledClient, String accessToken, String apiEndpoint, String version){
+        this.accessToken = accessToken;
+        baseResource = pooledClient.resource(apiEndpoint);
+        versionedDateResource = pooledClient.resource(apiEndpoint + "/services/data/" + version);
         sobjectsResource = versionedDateResource.path("/sobjects");
     }
 
+    private WebResource.Builder auth(WebResource resource) {
+        return resource.header(HttpHeaders.AUTHORIZATION, "OAuth " + accessToken);
+    }
+    
     @Override
     public GlobalDescription describeGlobal() {
-        return sobjectsResource.get(GlobalDescription.class);
+        return auth(sobjectsResource).get(GlobalDescription.class);
     }
 
     @Override
     public BasicSObjectInformation describeSObjectBasic(String type) {
-        return sobjectsResource.path("/" + type).get(BasicSObjectInformation.class);
+        return auth(sobjectsResource.path("/" + type)).get(BasicSObjectInformation.class);
     }
 
     @Override
     public SObjectDescription describeSObject(String type) {
-        return sobjectsResource.path("/" + type + "/describe").get(SObjectDescription.class);
+        return auth(sobjectsResource.path("/" + type + "/describe")).get(SObjectDescription.class);
     }
 
     @Override
     public String createSObject(String type, Map<String, ?> record) {
-        return sobjectsResource.path("/" + type)
+        return auth(sobjectsResource.path("/" + type))
                 .entity(record, MediaType.APPLICATION_JSON_TYPE)
                 .post(Map.class).get("id").toString();
     }
 
     @Override
     public void updateSObject(String type, String id, Map<String, ?> record) {
-        sobjectsResource.path("/" + type + "/" + id).queryParam("_HttpMethod", "PATCH")
+        auth(sobjectsResource.path("/" + type + "/" + id).queryParam("_HttpMethod", "PATCH"))
                 .entity(record, MediaType.APPLICATION_JSON_TYPE)
                 .post();
     }
 
     @Override
     public void deleteSObject(String type, String id) {
-        sobjectsResource.path("/" + type + "/" + id).delete();
+        auth(sobjectsResource.path("/" + type + "/" + id)).delete();
     }
 
     @Override
     public Map<String, ?> getSObject(String type, String id) {
         //noinspection unchecked
-        return (Map<String, ?>) sobjectsResource.path("/" + type + "/" + id).get(Map.class);
+        return (Map<String, ?>) auth(sobjectsResource.path("/" + type + "/" + id)).get(Map.class);
     }
 
     @Override
     public QueryResult query(String soql) {
-        return versionedDateResource.path("/query").queryParam("q", soql).get(QueryResult.class);
+        return auth(versionedDateResource.path("/query").queryParam("q", soql)).get(QueryResult.class);
     }
 
     @Override
     public QueryResult queryMore(String nextRecordsUrl) {
-        return baseResource.path(nextRecordsUrl).get(QueryResult.class);
+        return auth(baseResource.path(nextRecordsUrl)).get(QueryResult.class);
     }
 
     @Override
     public String getRawBase64Content(String contentUrl) {
-        return baseResource.path(contentUrl).get(String.class);
+        return auth(baseResource.path(contentUrl)).get(String.class);
     }
 }

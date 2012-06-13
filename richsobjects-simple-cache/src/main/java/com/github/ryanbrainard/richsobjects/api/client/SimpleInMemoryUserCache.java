@@ -11,7 +11,7 @@ import java.util.Map;
  * @author Ryan Brainard
  */
 @SuppressWarnings("UnusedDeclaration")
-class SimpleInMemoryUserCache implements SfdcApiUserCache {
+class SimpleInMemoryUserCache implements SfdcApiClient {
     
     private final SfdcApiClient api;
     private GlobalDescription cachedGlobalDescription;
@@ -20,11 +20,6 @@ class SimpleInMemoryUserCache implements SfdcApiUserCache {
 
     SimpleInMemoryUserCache(SfdcApiClient api) {
         this.api = api;
-        invalidate();
-    }
-
-    @Override
-    public void invalidate() {
         cachedGlobalDescription = null;
         cachedSObjectDescriptions = LruMap.newSync(5);
         cachedSObjects = LruMap.newSync(10);

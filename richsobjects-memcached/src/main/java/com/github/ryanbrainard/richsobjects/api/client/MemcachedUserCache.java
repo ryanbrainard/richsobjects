@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class MemcachedUserCache implements SfdcApiUserCache {
+public class MemcachedUserCache implements SfdcApiClient {
 
     private final MemcachedClient memcached;
     private final String userKey;
@@ -48,11 +48,6 @@ public class MemcachedUserCache implements SfdcApiUserCache {
         memcached.delete(globalKey(entityKey));
     }
     
-    @Override
-    public void invalidate() {
-        throw new UnsupportedOperationException(); //TODO
-    }
-
     @Override
     public GlobalDescription describeGlobal() {
         return loadEntity("DESCRIBE_GLOBAL", new ValueProvider<GlobalDescription>() {

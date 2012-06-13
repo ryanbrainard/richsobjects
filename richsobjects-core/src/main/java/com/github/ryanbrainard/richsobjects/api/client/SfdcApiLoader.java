@@ -17,28 +17,25 @@ public class SfdcApiLoader {
     public static SfdcApiClient get(double version) {
         final SfdcApiSessionProvider sessionProvider = getFirstOrThrow(sessionLoader);
         final SfdcApiClientProvider clientProvider = getFirstOrThrow(clientLoader);
-        final SfdcApiCacheProvider cacheProvider = getFirstOrElse(cacheLoader, DEFAULT_CACHE_PROVIDER);
 
-        return cacheProvider.get(
-                sessionProvider.getAccessToken() + version,
-                clientProvider.get(
-                        sessionProvider.getAccessToken(),
-                        sessionProvider.getApiEndpoint(),
-                        String.format("v%.1f", version)
-                )
+        // create underlying client
+        SfdcApiClient client = clientProvider.get(
+                sessionProvider.getAccessToken(),
+                sessionProvider.getApiEndpoint(),
+                String.format("v%.1f", version)
         );
+
+        // decorate client with caching layers
+        final String cacheKey = sessionProvider.getAccessToken() + version;
+        for (SfdcApiCacheProvider cacheProvider : cacheLoader) {
+            client = cacheProvider.get(cacheKey, client);
+        }
+
+        return client;
     }
 
     private static <P> ServiceLoader<P> loadProvider(Class<P> providerClass) {
         return ServiceLoader.load(providerClass, SfdcApiLoader.class.getClassLoader());
-    }
-
-    private static <S> S getFirstOrElse(ServiceLoader<S> loader, S defaultProvider) {
-        try {
-            return getFirstOrThrow(loader);
-        } catch (IllegalStateException e) {
-            return defaultProvider;
-        }
     }
 
     private static <S> S getFirstOrThrow(ServiceLoader<S> loader) {
@@ -50,11 +47,4 @@ public class SfdcApiLoader {
         }
         return providerIterator.next();
     }
-
-    private static final SfdcApiCacheProvider DEFAULT_CACHE_PROVIDER = new SfdcApiCacheProvider() {
-        @Override
-        public SfdcApiUserCache get(String key, SfdcApiClient apiClient) {
-            return new NoOpCache(apiClient);
-        }
-    };
 }

@@ -1,6 +1,6 @@
 package com.github.ryanbrainard.richsobjects.api.client;
 
-import java.util.*;
+import java.util.Map;
 
 /**
  * @author Ryan Brainard

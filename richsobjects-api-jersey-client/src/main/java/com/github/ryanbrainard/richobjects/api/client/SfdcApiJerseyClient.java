@@ -7,9 +7,6 @@ import com.github.ryanbrainard.richsobjects.api.model.QueryResult;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;

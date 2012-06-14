@@ -4,6 +4,7 @@ import com.github.ryanbrainard.richsobjects.RichSObject;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Ryan Brainard
@@ -12,10 +13,10 @@ public abstract class RichSObjectWrapper implements RichSObject {
 
     protected final RichSObject wrapped;
 
-    public RichSObjectWrapper(RichSObject wrapped) {
+    protected RichSObjectWrapper(RichSObject wrapped) {
         this.wrapped = wrapped;
     }
-    
+
     @Override
     public SObjectDescription getMetadata() {
         return wrapped.getMetadata();
@@ -37,7 +38,12 @@ public abstract class RichSObjectWrapper implements RichSObject {
     }
 
     @Override
+    public Map<String, Object> getRaw() {
+        return wrapped.getRaw();
+    }
+
+    @Override
     public Iterator<RichField> iterator() {
-        return wrapped.getFields();
+        return wrapped.iterator();
     }
 }

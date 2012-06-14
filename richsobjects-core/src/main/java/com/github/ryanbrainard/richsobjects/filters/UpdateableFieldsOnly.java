@@ -7,7 +7,7 @@ import java.util.Iterator;
 /**
 * @author Ryan Brainard
 */
-class UpdateableFieldsOnly extends IteratorFilter<RichSObject.RichField> {
+public class UpdateableFieldsOnly extends IteratorFilter<RichSObject.RichField> {
     public UpdateableFieldsOnly(Iterator<RichSObject.RichField> wrappedFields) {
         super(wrappedFields);
     }

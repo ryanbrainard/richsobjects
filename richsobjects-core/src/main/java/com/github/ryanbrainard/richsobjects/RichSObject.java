@@ -4,6 +4,7 @@ import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Ryan Brainard
@@ -17,6 +18,8 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
     Iterator<RichField> getFields();
 
     boolean hasField(String fieldName);
+
+    Map<String, Object> getRaw();
 
     public interface RichField {
 
@@ -43,6 +46,8 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
         byte[] asBytes();
 
         RichSObject asRef();
+
+        RichSObject setValue(Object value);
     }
 
 }

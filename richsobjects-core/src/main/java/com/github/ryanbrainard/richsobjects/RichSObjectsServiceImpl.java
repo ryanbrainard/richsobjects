@@ -5,6 +5,7 @@ import com.github.ryanbrainard.richsobjects.api.client.SfdcApiLoader;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.QueryResult;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
+import com.github.ryanbrainard.richsobjects.filters.UpdateableFieldsOnly;
 
 import java.util.*;
 
@@ -14,13 +15,13 @@ import java.util.*;
 public class RichSObjectsServiceImpl implements RichSObjectsService {
 
     @Override
-    public SfdcApiClient getApiClient() {
+    public SfdcApiClient api() {
         return SfdcApiLoader.get(24.0);
     }
 
     @Override
-    public List<BasicSObjectDescription> listSObjectTypes() {
-        final List<BasicSObjectDescription> metadata = getApiClient().describeGlobal().getSObjects();
+    public List<BasicSObjectDescription> types() {
+        final List<BasicSObjectDescription> metadata = api().describeGlobal().getSObjects();
         Collections.sort(metadata, new Comparator<BasicSObjectDescription>() {
             @Override
             public int compare(BasicSObjectDescription o1, BasicSObjectDescription o2) {
@@ -31,52 +32,65 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
     }
 
     @Override
-    public SObjectDescription describeSObjectType(String type) {
-        return getApiClient().describeSObject(type);
+    public SObjectDescription describe(String type) {
+        return api().describeSObject(type);
     }
 
     @Override
-    public RichSObject newSObject(String type) {
-        final Map<String,?> emptySObject = new HashMap<String, Object>();
-        for (SObjectDescription.Field f : describeSObjectType(type).getFields()) {
-            emptySObject.put(f.getName(), null);
+    public RichSObject unpopulated(String type) {
+        return new ImmutableRichSObject(this, describe(type), new HashMap<String, Object>());
+    }
+
+    @Override
+    public RichSObject insert(String type, Map<String, ?> record) {
+        final String id = api().createSObject(type, record);
+        return fetch(type, id);
+    }
+
+    @Override
+    public RichSObject insert(RichSObject record) {
+        return insert(record.getMetadata().getName(), record.getRaw());
+    }
+
+    @Override
+    public RichSObject update(String type, String id, Map<String, ?> record) {
+        api().updateSObject(type, id, record);
+        return fetch(type, id);
+    }
+
+    @Override
+    public RichSObject update(RichSObject record) {
+        final Map<String, Object> rawRecords = record.getRaw();
+        final Map<String, Object> updateableFields = new HashMap<String, Object>(rawRecords.size());
+        for (RichSObject.RichField f : new UpdateableFieldsOnly(record.getFields())) {
+            final String fieldName = f.getMetadata().getName().toUpperCase();
+            if (rawRecords.containsKey(fieldName)) {
+                updateableFields.put(fieldName, rawRecords.get(fieldName));
+            }
         }
-        return new ImmutableRichSObject(this, describeSObjectType(type), emptySObject);
+        
+        return update(record.getMetadata().getName(), record.get("id").asString(), updateableFields);
     }
 
     @Override
-    public RichSObject existingSObject(String type, Map<String, ?> record) {
-        return new ImmutableRichSObject(this, describeSObjectType(type), record);
-    }
-    
-    @Override
-    public String createSObject(String type, Map<String, ?> record) {
-        return getApiClient().createSObject(type, record);
+    public void delete(String type, String id) {
+        api().deleteSObject(type, id);
     }
 
     @Override
-    public void updateSObject(String type, String id, Map<String, ?> record) {
-        getApiClient().updateSObject(type, id, record);
+    public void delete(RichSObject record) {
+        delete(record.getMetadata().getName(), record.get("id").asString());
     }
 
     @Override
-    public void deleteSObject(String type, String id) {
-        getApiClient().deleteSObject(type, id);
+    public RichSObject fetch(String type, String id) {
+        return new ImmutableRichSObject(this, describe(type), api().getSObject(type, id));
     }
 
     @Override
-    public RichSObject getSObject(String type, String id) {
-        return new ImmutableRichSObject(this, describeSObjectType(type), getRawSObject(type, id));
-    }
-
-    private Map<String, ?> getRawSObject(String sobject, String id) {
-        return getApiClient().getSObject(sobject, id);
-    }
-
-    @Override
-    public Iterator<RichSObject> getRecentItems(String type) {
-        final SObjectDescription metadata = describeSObjectType(type);
-        final Iterator<Map<String,?>> rawRecentItems = getApiClient().describeSObjectBasic(type).getRecentItems().iterator();
+    public Iterator<RichSObject> recentItems(String type) {
+        final SObjectDescription metadata = describe(type);
+        final Iterator<Map<String,?>> rawRecentItems = api().describeSObjectBasic(type).getRecentItems().iterator();
 
         return new Iterator<RichSObject>() {
             @Override
@@ -99,10 +113,10 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
     @Override
     public Iterator<RichSObject> query(final String soql) {
         final String type = soql.replaceFirst(".*FROM\\s+(\\w+).*", "$1");
-        final SObjectDescription metadata = describeSObjectType(type);
+        final SObjectDescription metadata = describe(type);
         
         return new Iterator<RichSObject>() {
-            QueryResult queryResult = getApiClient().query(soql);
+            QueryResult queryResult = api().query(soql);
             Iterator<Map<String, ?>> queryResultItr = queryResult.getRecords().iterator();
             
             @Override
@@ -115,7 +129,7 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
                 if (queryResultItr.hasNext()) {
                     return new ImmutableRichSObject(RichSObjectsServiceImpl.this, metadata, queryResultItr.next());
                 } else if (!queryResult.isDone()) {
-                    queryResult = getApiClient().queryMore(queryResult.getNextRecordsUrl());
+                    queryResult = api().queryMore(queryResult.getNextRecordsUrl());
                     queryResultItr = queryResult.getRecords().iterator();
                     return next();
                 } else {

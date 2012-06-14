@@ -22,12 +22,12 @@ public abstract class AbstractRichSObjectServiceIT {
     @BeforeClass
     public void setupService() {
         service = new RichSObjectsServiceImpl();
-        System.out.println("Running " + this.getClass() + " with API provider: " + service.getApiClient().getClass());
+        System.out.println("Running " + this.getClass() + " with API provider: " + service.api().getClass());
     }
 
     @Test
     public void testListSObjectTypes() {
-        List<BasicSObjectDescription> basicSObjectDescriptions = service.listSObjectTypes();
+        List<BasicSObjectDescription> basicSObjectDescriptions = service.types();
         assertCollectionContains(basicSObjectDescriptions, "Account", new ElementMatcher<BasicSObjectDescription, String>() {
             @Override
             public boolean matches(BasicSObjectDescription basicSObjectDescription, String matches) {
@@ -38,14 +38,14 @@ public abstract class AbstractRichSObjectServiceIT {
 
     @Test
     public void testDescribeSObjectType() {
-        SObjectDescription description = service.describeSObjectType("Account");
+        SObjectDescription description = service.describe("Account");
         assertEquals(description.getName(), "Account");
         assertNotNull(description.getFields());
     }
 
     @Test
     public void testGetRecentItems() {
-        Iterator<RichSObject> recents = service.getRecentItems("Account");
+        Iterator<RichSObject> recents = service.recentItems("Account");
         assertTrue(recents.hasNext());
     }
 
@@ -64,19 +64,16 @@ public abstract class AbstractRichSObjectServiceIT {
 
     @Test
     public void testSObjectCRUD() {
-        Map<String, String> rawAcct = new HashMap<String, String>(1);
-        rawAcct.put("Name", "TEST1");
+        final RichSObject newAcct = service.unpopulated("Account").get("Name").setValue("TEST1");
 
-        String acctId = service.createSObject("Account", rawAcct);
-        final RichSObject acct1 = service.getSObject("Account", acctId);
-        assertEquals(acct1.get("Name").getValue(), "TEST1");
+        final RichSObject insertedAcct = service.insert(newAcct);
+        assertEquals(insertedAcct.get("Name").getValue(), "TEST1");
 
-        rawAcct.put("Name", "TEST2");
-        service.updateSObject("Account", acctId, rawAcct);
-        final RichSObject acct2 = service.getSObject("Account", acctId);
-        assertEquals(acct2.get("Name").getValue(), "TEST2");
+        final RichSObject unUpdatedAcct = insertedAcct.get("Name").setValue("TEST2");
+        final RichSObject updatedAcct = service.update(unUpdatedAcct);
+        assertEquals(updatedAcct.get("Name").getValue(), "TEST2");
 
-        service.deleteSObject("Account", acctId);
+        service.delete(updatedAcct);
     }
 
     @Test
@@ -95,17 +92,17 @@ public abstract class AbstractRichSObjectServiceIT {
     public void testAsTypesName() throws Exception {
         final String acctName = String.valueOf(System.currentTimeMillis());
         final double annualRevenue = 1000D;
-        final String acctId = service.createSObject("Account", new HashMap<String, Object>() {{
+        final RichSObject acct = service.insert("Account", new HashMap<String, Object>() {{
             put("name", acctName);
             put("annualRevenue", annualRevenue);
         }});
-        String conId = service.createSObject("Contact", new HashMap<String, Object>() {{
-            put("accountId", acctId);
+        RichSObject contact = service.insert("Contact", new HashMap<String, Object>() {{
+            put("accountId", acct.get("id").asString());
             put("lastName", "blah");
         }});
 
-        assertEquals(service.getSObject("Contact", conId).get("accountId").asAny(), acctId);
-        assertEquals(service.getSObject("Contact", conId).get("accountId").asAnyWithNameRef(), acctName);
+        assertEquals(contact.get("accountId").asAny(), acct.get("id").asString());
+        assertEquals(contact.get("accountId").asAnyWithNameRef(), acctName);
     }
 
     private void assertAsType(RichSObject.RichField field, Class<?> expectedRawType, Class<?> expectedConvertedType) {

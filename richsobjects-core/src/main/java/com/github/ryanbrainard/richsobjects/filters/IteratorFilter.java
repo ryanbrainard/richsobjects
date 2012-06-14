@@ -8,13 +8,18 @@ import java.util.concurrent.ArrayBlockingQueue;
 /**
  * @author Ryan Brainard
  */
-public abstract class IteratorFilter<T> implements Iterator<T> {
+public abstract class IteratorFilter<T> implements Iterator<T>, Iterable<T> {
 
     private final Iterator<T> filteree;
     private Queue<T> nexts = new ArrayBlockingQueue<T>(1);
 
     public IteratorFilter(Iterator<T> filteree) {
         this.filteree = filteree;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return this;
     }
 
     @Override

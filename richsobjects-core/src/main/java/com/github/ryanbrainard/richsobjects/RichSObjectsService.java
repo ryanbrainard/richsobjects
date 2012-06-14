@@ -14,25 +14,79 @@ import java.util.Map;
  */
 public interface RichSObjectsService {
 
-    List<BasicSObjectDescription> listSObjectTypes();
+    /**
+     * Underlying API client. This may or not be cached.
+     */
+    SfdcApiClient api();
 
-    Iterator<RichSObject> getRecentItems(String type);
+    /**
+     * List of all standard and custom object types with basic metadata
+     */
+    List<BasicSObjectDescription> types();
 
-    RichSObject getSObject(String type, String id);
+    /**
+     * Detailed metadata about a type
+     */
+    SObjectDescription describe(String type);
 
-    SObjectDescription describeSObjectType(String type);
+    /**
+     * Create an empty, in-memory RichSObject of a given type
+     * with metadata, but fields left unpopulated.
+     */
+    RichSObject unpopulated(String type);
 
-    RichSObject newSObject(String type);
+    /**
+     * Insert a record of a given type into Salesforce
+     *
+     * @return latest version of RichSObject
+     */
+    RichSObject insert(String type, Map<String, ?> record);
 
-    RichSObject existingSObject(String type, Map<String, ?> record);
+    /**
+     * Insert a record into Salesforce
+     *
+     * @return latest version of RichSObject
+     */
+    RichSObject insert(RichSObject record);
 
-    void updateSObject(String type, String id, Map<String, ?> record);
+    /**
+     * Fetch a record of a given type from Salesforce
+     */
+    RichSObject fetch(String type, String id);
 
-    String createSObject(String type, Map<String, ?> record);
+    /**
+     * Update a record of a given type in Salesforce
+     *
+     * @return latest version of RichSObject
+     */
+    RichSObject update(String type, String id, Map<String, ?> record);
 
-    void deleteSObject(String type, String id);
+    /**
+     * Update a record in Salesforce
+     *
+     * @return latest version of RichSObject
+     */
+    RichSObject update(RichSObject record);
 
+    /**
+     * Delete a record of a given type in Salesforce
+     */
+    void delete(String type, String id);
+
+    /**
+     * Delete a record in Salesforce
+     */
+    void delete(RichSObject record);
+
+    /**
+     * Recently viewed items of a given type.
+     * A tab must exist for this type for recent items to be tracked.
+     */
+    Iterator<RichSObject> recentItems(String type);
+
+    /**
+     * Perform a SOQL query against Salesforce
+     */
     Iterator<RichSObject> query(String soql);
 
-    SfdcApiClient getApiClient();
 }

@@ -10,7 +10,7 @@ class FieldFilterUtil {
     static boolean isPersonAccountField(RichSObject.RichField maybeNext) {
         if ("Account".equals(maybeNext.getParent().getMetadata().getName())) {
             final String fieldName = maybeNext.getMetadata().getName();
-            if ("FirstName".equals(fieldName) || "LastName".equals(fieldName) || fieldName.endsWith("__pc")) {
+            if ("Salutation".equals(fieldName) || "FirstName".equals(fieldName) || "LastName".equals(fieldName) || fieldName.endsWith("__pc")) {
                 return true;
             }
         }

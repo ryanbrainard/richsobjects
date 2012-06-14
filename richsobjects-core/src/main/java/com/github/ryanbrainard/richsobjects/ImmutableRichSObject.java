@@ -48,6 +48,11 @@ class ImmutableRichSObject implements RichSObject {
     }
 
     @Override
+    public Map<String, Object> getRaw() {
+        return record;
+    }
+
+    @Override
     public SObjectDescription getMetadata() {
         return metadata;
     }
@@ -214,7 +219,7 @@ class ImmutableRichSObject implements RichSObject {
 
             try {
                 if ("xsd:base64Binary".equals(getMetadata().getSoapType())) {
-                    return BASE_64_DECODER.decodeBuffer(service.getApiClient().getRawBase64Content(asString()));
+                    return BASE_64_DECODER.decodeBuffer(service.api().getRawBase64Content(asString()));
                 } else {
                     return BASE_64_DECODER.decodeBuffer(asString());
                 }
@@ -236,7 +241,14 @@ class ImmutableRichSObject implements RichSObject {
                 throw new UnsupportedOperationException(fullyQualifiedName() + " references multiple entities, which is not yet supported");
             }
 
-            return service.getSObject(referenceTo.get(0), asString());
+            return service.fetch(referenceTo.get(0), asString());
+        }
+
+        @Override
+        public RichSObject setValue(Object value) {
+            final Map<String, Object> mutableRecord = new HashMap<String, Object>(getRaw());
+            mutableRecord.put(fieldName, value);
+            return new ImmutableRichSObject(service, metadata, mutableRecord);
         }
     }
 

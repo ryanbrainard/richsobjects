@@ -34,7 +34,7 @@ public class MultiLayerCacheIT extends AbstractRichSObjectServiceIT {
 
     @Test
     public void testLayers() throws Exception {
-        final SfdcApiClient outer = service.getApiClient();
+        final SfdcApiClient outer = service.api();
         assertEquals(outer.getClass().getSimpleName(), "SimpleInMemoryUserCache");
 
         final SfdcApiClient middle = getFieldValue(outer, "api");

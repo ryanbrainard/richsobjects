@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * @author Ryan Brainard
  */
-public class MemcachedUserCache implements SfdcApiClient {
+class MemcachedUserCache implements SfdcApiClient {
 
     private final MemcachedClient memcached;
     private final String userKey;

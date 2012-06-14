@@ -65,6 +65,7 @@
         <module>richsobjects-api-provider-interfaces</module>
         <module>richsobjects-simple-cache</module>
         <module>richsobjects-memcached</module>
+        <module>rich-sobjects-multilayer-cache-tests</module>
     </modules>
 
     <dependencyManagement>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>richsobjects</artifactId>
+        <groupId>com.github.ryanbrainard</groupId>
+        <version>0.2-BETA-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>rich-sobjects-multilayer-cache-tests</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.ryanbrainard</groupId>
+            <artifactId>richsobjects-core</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ryanbrainard</groupId>
+            <artifactId>richsobjects-jersey-client</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ryanbrainard</groupId>
+            <artifactId>richsobjects-memcached</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ryanbrainard</groupId>
+            <artifactId>richsobjects-simple-cache</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <artifactId>richsobjects-api-provider-base-tests</artifactId>
+            <groupId>com.github.ryanbrainard</groupId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

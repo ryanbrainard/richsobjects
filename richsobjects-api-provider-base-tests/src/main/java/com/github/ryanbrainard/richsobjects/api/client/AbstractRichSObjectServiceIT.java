@@ -17,7 +17,7 @@ import static org.testng.Assert.*;
  */
 public abstract class AbstractRichSObjectServiceIT {
 
-    private RichSObjectsService service;
+    protected RichSObjectsService service;
     
     @BeforeClass
     public void setupService() {

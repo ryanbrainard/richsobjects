@@ -60,7 +60,7 @@
     <modules>
         <module>richsobjects-core</module>
         <module>richsobjects-interfaces</module>
-        <module>richsobjects-api-force-rest</module>
+        <!--<module>richsobjects-api-force-rest</module>-->
         <module>richsobjects-api-jersey-client</module>
         <module>richsobjects-tests-base</module>
         <module>richsobjects-cache-simple</module>

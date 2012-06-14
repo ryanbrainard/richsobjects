@@ -68,8 +68,35 @@
         <module>rich-sobjects-multilayer-cache-tests</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- TEST ONLY -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.6.2</version>
+            </dependency>
+
+            <!-- TEST ONLY -->
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.2.1</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <artifactId>richsobjects-core</artifactId>
                 <groupId>com.github.ryanbrainard</groupId>
@@ -84,12 +111,6 @@
                 <artifactId>richsobjects-api-provider-base-tests</artifactId>
                 <groupId>com.github.ryanbrainard</groupId>
                 <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>6.2.1</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

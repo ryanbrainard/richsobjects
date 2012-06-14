@@ -26,14 +26,16 @@
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
         <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
-            <groupId>com.github.ryanbrainard</groupId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.force.api</groupId>
             <artifactId>force-rest-api</artifactId>
             <version>0.0.19-SNAPSHOT</version>
+        </dependency>
+
+        <!-- TEST ONLY -->
+        <dependency>
+            <artifactId>richsobjects-api-provider-base-tests</artifactId>
+            <groupId>com.github.ryanbrainard</groupId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

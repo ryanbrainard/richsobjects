@@ -1,5 +1,8 @@
 package com.github.ryanbrainard.richsobjects.api.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
@@ -9,6 +12,8 @@ import java.util.ServiceLoader;
 public class SfdcApiLoader {
 
     private SfdcApiLoader() {}
+
+    private static final Logger logger = LoggerFactory.getLogger(SfdcApiLoader.class);
 
     private static final ServiceLoader<SfdcApiSessionProvider> sessionLoader = loadProvider(SfdcApiSessionProvider.class);
     private static final ServiceLoader<SfdcApiClientProvider> clientLoader = loadProvider(SfdcApiClientProvider.class);
@@ -35,7 +40,15 @@ public class SfdcApiLoader {
     }
 
     private static <P> ServiceLoader<P> loadProvider(Class<P> providerClass) {
-        return ServiceLoader.load(providerClass, SfdcApiLoader.class.getClassLoader());
+        final ServiceLoader<P> loader = ServiceLoader.load(providerClass, SfdcApiLoader.class.getClassLoader());
+
+        logger.info("SfdcApiLoader loaded providers for service: " + providerClass.getName());
+        int i = 1;
+        for (P p : loader) {
+            logger.info(providerClass.getName() + " #" + i++ + ": " + p.getClass());
+        }
+
+        return loader;
     }
 
     private static <S> S getFirstOrThrow(ServiceLoader<S> loader) {

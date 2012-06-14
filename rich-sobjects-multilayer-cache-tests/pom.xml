@@ -12,6 +12,7 @@
     <artifactId>rich-sobjects-multilayer-cache-tests</artifactId>
 
     <dependencies>
+        <!-- TEST ONLY -->
         <dependency>
             <groupId>com.github.ryanbrainard</groupId>
             <artifactId>richsobjects-core</artifactId>

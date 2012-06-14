@@ -5,6 +5,8 @@ import net.spy.memcached.ConnectionFactoryBuilder;
 import net.spy.memcached.MemcachedClient;
 import net.spy.memcached.auth.AuthDescriptor;
 import net.spy.memcached.auth.PlainCallbackHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,6 +17,7 @@ import java.util.Arrays;
  */
 public class MemcachedCacheProvider implements SfdcApiCacheProvider {
 
+    private static Logger logger = LoggerFactory.getLogger(MemcachedCacheProvider.class);
     private static final MemcachedClient memcached = initClient();
 
     private static MemcachedClient initClient() {
@@ -23,8 +26,8 @@ public class MemcachedCacheProvider implements SfdcApiCacheProvider {
         final String servers  = System.getenv("MEMCACHE_SERVERS");
         
         if (username == null || password == null || servers == null) {
-            System.err.println("WARNING: Memcached is not configured properly and will not be used for caching Rich SObjects. " +
-                               "Be sure to set environment variables for MEMCACHE_USERNAME, MEMCACHE_PASSWORD, MEMCACHE_SERVERS.");
+            logger.error("WARNING: Memcached is not configured properly and will not be used for caching Rich SObjects. " +
+                         "Be sure to set environment variables for MEMCACHE_USERNAME, MEMCACHE_PASSWORD, MEMCACHE_SERVERS.");
             return null;
         }
         

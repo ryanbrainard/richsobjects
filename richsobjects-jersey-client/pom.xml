@@ -20,11 +20,6 @@
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
         <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
-            <groupId>com.github.ryanbrainard</groupId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
             <version>${com.sun.jersey.version}</version>
@@ -38,6 +33,13 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mrbean</artifactId>
             <version>1.7.1</version>
+        </dependency>
+
+        <!-- TEST ONLY -->
+        <dependency>
+            <artifactId>richsobjects-api-provider-base-tests</artifactId>
+            <groupId>com.github.ryanbrainard</groupId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

@@ -23,8 +23,8 @@ public abstract class RichSObjectWrapper implements RichSObject {
     }
 
     @Override
-    public RichField get(String fieldName) {
-        return wrapped.get(fieldName);
+    public RichField getField(String fieldName) {
+        return wrapped.getField(fieldName);
     }
 
     @Override

@@ -66,7 +66,7 @@ class ImmutableRichSObject implements RichSObject {
     }
 
     @Override
-    public RichField get(String fieldName) {
+    public RichField getField(String fieldName) {
         return new ImmutableRichField(fieldName.toUpperCase());
     }
 
@@ -87,7 +87,7 @@ class ImmutableRichSObject implements RichSObject {
 
             @Override
             public RichField next() {
-                return get(fieldIterator.next().getName());
+                return getField(fieldIterator.next().getName());
             }
 
             @Override
@@ -273,7 +273,7 @@ class ImmutableRichSObject implements RichSObject {
                 throw new UnsupportedOperationException();
                 // TODO: http://www.salesforce.com/us/developer/docs/api_rest/Content/dome_sobject_insert_update_blob.htm
             } else if ("tns:ID".equals(soapType) && value instanceof RichSObject) {
-                return ((RichSObject) value).get("ID");
+                return ((RichSObject) value).getField("ID");
             } else {
                 return value;
             }

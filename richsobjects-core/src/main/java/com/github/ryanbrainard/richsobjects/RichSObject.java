@@ -13,7 +13,7 @@ public interface RichSObject extends Iterable<RichSObject.RichField> {
 
     SObjectDescription getMetadata();
 
-    RichField get(String fieldName);
+    RichField getField(String fieldName);
 
     Iterator<RichField> getFields();
 

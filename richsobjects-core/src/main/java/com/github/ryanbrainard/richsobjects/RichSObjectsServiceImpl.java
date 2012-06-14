@@ -37,24 +37,24 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
     }
 
     @Override
-    public RichSObject unpopulated(String type) {
-        return new ImmutableRichSObject(this, describe(type), new HashMap<String, Object>());
+    public RichSObject of(String type) {
+        return of(type, new HashMap<String, Object>());
     }
 
     @Override
-    public RichSObject insert(String type, Map<String, ?> record) {
-        final String id = api().createSObject(type, record);
-        return fetch(type, id);
+    public RichSObject of(String type, String recordId) {
+        return of(type, Collections.singletonMap("Id", recordId));
+    }
+    
+    @Override
+    public RichSObject of(String type, Map<String, ?> record) {
+        return new ImmutableRichSObject(this, describe(type), record);
     }
 
     @Override
     public RichSObject insert(RichSObject record) {
-        return insert(record.getMetadata().getName(), record.getRaw());
-    }
-
-    @Override
-    public RichSObject update(String type, String id, Map<String, ?> record) {
-        api().updateSObject(type, id, record);
+        String type = record.getMetadata().getName();
+        final String id = api().createSObject(type, record.getRaw());
         return fetch(type, id);
     }
 
@@ -68,18 +68,16 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
                 updateableFields.put(fieldName, rawRecords.get(fieldName));
             }
         }
-        
-        return update(record.getMetadata().getName(), record.get("id").asString(), updateableFields);
-    }
 
-    @Override
-    public void delete(String type, String id) {
-        api().deleteSObject(type, id);
+        String type = record.getMetadata().getName();
+        String id = record.getField("id").asString();
+        api().updateSObject(type, id, updateableFields);
+        return fetch(type, id);
     }
 
     @Override
     public void delete(RichSObject record) {
-        delete(record.getMetadata().getName(), record.get("id").asString());
+        api().deleteSObject(record.getMetadata().getName(), record.getField("id").asString());
     }
 
     @Override

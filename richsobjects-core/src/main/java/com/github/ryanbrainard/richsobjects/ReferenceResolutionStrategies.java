@@ -15,7 +15,7 @@ enum ReferenceResolutionStrategies implements ReferenceResolutionStrategy {
     NAME_ONLY {
         @Override
         public String resolve(RichSObject.RichField field) {
-            return field.asRef().get("NAME").asString();
+            return field.asRef().getField("NAME").asString();
         }
     },
 

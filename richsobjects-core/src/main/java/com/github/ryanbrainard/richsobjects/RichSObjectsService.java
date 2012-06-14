@@ -33,14 +33,19 @@ public interface RichSObjectsService {
      * Create an empty, in-memory RichSObject of a given type
      * with metadata, but fields left unpopulated.
      */
-    RichSObject unpopulated(String type);
+    RichSObject of(String type);
 
     /**
-     * Insert a record of a given type into Salesforce
-     *
-     * @return latest version of RichSObject
+     * Create an empty, in-memory RichSObject of a given type
+     * with metadata and given record id.
      */
-    RichSObject insert(String type, Map<String, ?> record);
+    RichSObject of(String type, String recordId);
+
+    /**
+     * Create an empty, in-memory RichSObject of a given type
+     * with metadata and given field values.
+     */
+    RichSObject of(String type, Map<String, ?> record);
 
     /**
      * Insert a record into Salesforce
@@ -55,23 +60,11 @@ public interface RichSObjectsService {
     RichSObject fetch(String type, String id);
 
     /**
-     * Update a record of a given type in Salesforce
-     *
-     * @return latest version of RichSObject
-     */
-    RichSObject update(String type, String id, Map<String, ?> record);
-
-    /**
      * Update a record in Salesforce
      *
      * @return latest version of RichSObject
      */
     RichSObject update(RichSObject record);
-
-    /**
-     * Delete a record of a given type in Salesforce
-     */
-    void delete(String type, String id);
 
     /**
      * Delete a record in Salesforce

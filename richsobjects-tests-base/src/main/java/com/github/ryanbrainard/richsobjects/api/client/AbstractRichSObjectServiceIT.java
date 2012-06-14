@@ -5,6 +5,7 @@ import com.github.ryanbrainard.richsobjects.RichSObjectsService;
 import com.github.ryanbrainard.richsobjects.RichSObjectsServiceImpl;
 import com.github.ryanbrainard.richsobjects.api.model.BasicSObjectDescription;
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
+import org.joda.time.DateTime;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -77,6 +78,24 @@ public abstract class AbstractRichSObjectServiceIT {
     }
 
     @Test
+    public void testSetValue() throws Exception {
+        assertSetting("name", "Something");
+        assertSetting("My_Checkbox__c", true);
+        assertSetting("My_Checkbox__c", false);
+        assertSetting("AnnualRevenue", 123D);
+        assertSetting("NumberOfEmployees", 456);
+        assertSetting("Send_Email_At__c", new DateTime().toDateMidnight().toDate());
+        assertSetting("img_src_closed_gif__c", new DateTime().toDateMidnight().toDate());
+    }
+
+    private void assertSetting(String fieldName, Object value) {
+        final RichSObject base = service.unpopulated("Account").get("name").setValue("XXX");
+        final RichSObject set = base.get(fieldName).setValue(value);
+        final RichSObject saved = service.insert(set);
+        assertEquals(saved.get(fieldName).asAny(), value);
+    }
+
+    @Test
     public void testAsTypes() throws Exception {
         final RichSObject doc = service.query("SELECT AuthorId,Body,BodyLength,CreatedDate,Name,IsDeleted FROM Document LIMIT 1").next();
         assertAsType(doc.get("AuthorId"), String.class, String.class);
@@ -99,7 +118,7 @@ public abstract class AbstractRichSObjectServiceIT {
             put("annualRevenue", annualRevenue);
         }});
         RichSObject contact = service.insert("Contact", new HashMap<String, Object>() {{
-            put("accountId", acct.get("id").asString());
+            put("accountId", acct);
             put("lastName", "blah");
         }});
 

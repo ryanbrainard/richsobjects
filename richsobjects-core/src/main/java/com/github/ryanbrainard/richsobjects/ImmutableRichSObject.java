@@ -2,9 +2,9 @@ package com.github.ryanbrainard.richsobjects;
 
 import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -14,6 +14,7 @@ import java.util.*;
  */
 class ImmutableRichSObject implements RichSObject {
 
+    private static final BASE64Encoder BASE_64_ENCODER = new BASE64Encoder();
     private static final BASE64Decoder BASE_64_DECODER = new BASE64Decoder();
     private static final SimpleDateFormat API_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat API_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -253,8 +254,29 @@ class ImmutableRichSObject implements RichSObject {
         @Override
         public RichSObject setValue(Object value) {
             final Map<String, Object> mutableRecord = new HashMap<String, Object>(getRaw());
-            mutableRecord.put(fieldName, value);
+            mutableRecord.put(fieldName, coerce(value));
             return new ImmutableRichSObject(service, metadata, mutableRecord);
+        }
+
+        private Object coerce(Object value) {
+            if (value == null) {
+                return null;
+            }
+            
+            final String soapType = getMetadata().getSoapType();
+            
+            if ("xsd:dateTime".equals(soapType) && value instanceof Date) {
+                return API_DATE_TIME_FORMAT.format((Date) value);
+            } else if ("xsd:date".equals(soapType) && value instanceof Date) {
+                return API_DATE_FORMAT.format((Date) value);
+            } else if ("xsd:base64Binary".equals(soapType) && value instanceof byte[]) {
+                throw new UnsupportedOperationException();
+                // TODO: http://www.salesforce.com/us/developer/docs/api_rest/Content/dome_sobject_insert_update_blob.htm
+            } else if ("tns:ID".equals(soapType) && value instanceof RichSObject) {
+                return ((RichSObject) value).get("ID");
+            } else {
+                return value;
+            }
         }
     }
 

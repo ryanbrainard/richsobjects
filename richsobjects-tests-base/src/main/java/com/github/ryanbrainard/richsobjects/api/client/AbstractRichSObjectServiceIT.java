@@ -79,13 +79,15 @@ public abstract class AbstractRichSObjectServiceIT {
     @Test
     public void testAsTypes() throws Exception {
         final RichSObject doc = service.query("SELECT AuthorId,Body,BodyLength,CreatedDate,Name,IsDeleted FROM Document LIMIT 1").next();
-
         assertAsType(doc.get("AuthorId"), String.class, String.class);
         assertAsType(doc.get("Name"), String.class, String.class);
         assertAsType(doc.get("CreatedDate"), String.class, Date.class);
         assertAsType(doc.get("IsDeleted"), Boolean.class, Boolean.class);
         assertAsType(doc.get("BodyLength"), Integer.class, Integer.class);
         assertAsType(doc.get("Body"), String.class, byte[].class);
+
+        final RichSObject acct = service.query("SELECT LastActivityDate FROM Account WHERE LastActivityDate != null LIMIT 1").next();
+        assertAsType(acct.get("LastActivityDate"), String.class, Date.class);
     }
 
     @Test

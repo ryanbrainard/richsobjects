@@ -4,6 +4,7 @@ import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import sun.misc.BASE64Decoder;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -14,7 +15,8 @@ import java.util.*;
 class ImmutableRichSObject implements RichSObject {
 
     private static final BASE64Decoder BASE_64_DECODER = new BASE64Decoder();
-    private static final SimpleDateFormat API_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static final SimpleDateFormat API_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat API_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     private final transient RichSObjectsService service;
     private final SObjectDescription metadata;
@@ -203,11 +205,15 @@ class ImmutableRichSObject implements RichSObject {
             if (getValue() == null) {
                 return null;
             }
-            
+
             try {
-                return API_DATE_FORMAT.parse(asString());
+                return API_DATE_TIME_FORMAT.parse(asString());
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                try {
+                    return API_DATE_FORMAT.parse(asString());
+                } catch (ParseException e1) {
+                    throw new RuntimeException(e1);
+                }
             }
         }
 

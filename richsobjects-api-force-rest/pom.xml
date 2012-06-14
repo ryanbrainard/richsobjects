@@ -7,10 +7,10 @@
     <parent>
         <artifactId>richsobjects</artifactId>
         <groupId>com.github.ryanbrainard</groupId>
-        <version>0.1-BETA-SNAPSHOT</version>
+        <version>0.2-BETA-SNAPSHOT</version>
     </parent>
 
-    <artifactId>richsobjects-force-rest-api</artifactId>
+    <artifactId>richsobjects-api-force-rest</artifactId>
 
     <repositories>
         <repository>
@@ -22,7 +22,7 @@
 
     <dependencies>
         <dependency>
-            <artifactId>richsobjects-api-provider-interfaces</artifactId>
+            <artifactId>richsobjects-interfaces</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
         <dependency>
@@ -33,7 +33,7 @@
 
         <!-- TEST ONLY -->
         <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
+            <artifactId>richsobjects-tests-base</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
             <scope>test</scope>
         </dependency>

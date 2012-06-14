@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rich-sobjects-multilayer-cache-tests</artifactId>
+    <artifactId>richsobjects-cache-tests-multilayer</artifactId>
 
     <dependencies>
         <!-- TEST ONLY -->
@@ -21,24 +21,24 @@
         </dependency>
         <dependency>
             <groupId>com.github.ryanbrainard</groupId>
-            <artifactId>richsobjects-jersey-client</artifactId>
+            <artifactId>richsobjects-api-jersey-client</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.ryanbrainard</groupId>
-            <artifactId>richsobjects-memcached</artifactId>
+            <artifactId>richsobjects-cache-memcached</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.ryanbrainard</groupId>
-            <artifactId>richsobjects-simple-cache</artifactId>
+            <artifactId>richsobjects-cache-simple</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
+            <artifactId>richsobjects-tests-base</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
             <version>${project.version}</version>
             <scope>test</scope>

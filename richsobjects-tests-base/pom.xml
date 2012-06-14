@@ -8,27 +8,23 @@
         <version>0.2-BETA-SNAPSHOT</version>
     </parent>
 
-    <artifactId>richsobjects-simple-cache</artifactId>
+    <artifactId>richsobjects-tests-base</artifactId>
 
     <dependencies>
         <dependency>
-            <artifactId>richsobjects-api-provider-interfaces</artifactId>
+            <artifactId>richsobjects-core</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- TEST ONLY -->
-        <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
-            <groupId>com.github.ryanbrainard</groupId>
-            <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
-            <artifactId>richsobjects-jersey-client</artifactId>
-            <groupId>com.github.ryanbrainard</groupId>
-            <version>${project.version}</version>
-            <scope>test</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
+
 </project>

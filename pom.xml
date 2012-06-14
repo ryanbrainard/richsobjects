@@ -59,13 +59,13 @@
 
     <modules>
         <module>richsobjects-core</module>
-        <!--<module>richsobjects-force-rest-api</module>-->
-        <module>richsobjects-jersey-client</module>
-        <module>richsobjects-api-provider-base-tests</module>
-        <module>richsobjects-api-provider-interfaces</module>
-        <module>richsobjects-simple-cache</module>
-        <module>richsobjects-memcached</module>
-        <module>rich-sobjects-multilayer-cache-tests</module>
+        <module>richsobjects-interfaces</module>
+        <module>richsobjects-api-force-rest</module>
+        <module>richsobjects-api-jersey-client</module>
+        <module>richsobjects-tests-base</module>
+        <module>richsobjects-cache-simple</module>
+        <module>richsobjects-cache-memcached</module>
+        <module>richsobjects-cache-tests-multilayer</module>
     </modules>
 
     <dependencies>
@@ -103,12 +103,12 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>richsobjects-api-provider-interfaces</artifactId>
+                <artifactId>richsobjects-interfaces</artifactId>
                 <groupId>com.github.ryanbrainard</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>richsobjects-api-provider-base-tests</artifactId>
+                <artifactId>richsobjects-tests-base</artifactId>
                 <groupId>com.github.ryanbrainard</groupId>
                 <version>${project.version}</version>
                 <scope>test</scope>

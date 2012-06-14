@@ -12,7 +12,7 @@
 
     <dependencies>
         <dependency>
-            <artifactId>richsobjects-api-provider-interfaces</artifactId>
+            <artifactId>richsobjects-interfaces</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
     </dependencies>

@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>richsobjects-api-provider-interfaces</artifactId>
+    <artifactId>richsobjects-interfaces</artifactId>
 
 
 </project>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>richsobjects-memcached</artifactId>
+    <artifactId>richsobjects-cache-memcached</artifactId>
 
     <repositories>
         <repository>
@@ -30,19 +30,19 @@
             <version>2.7.3</version>
         </dependency>
         <dependency>
-            <artifactId>richsobjects-api-provider-interfaces</artifactId>
+            <artifactId>richsobjects-interfaces</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
 
         <!-- TEST ONLY -->
         <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
+            <artifactId>richsobjects-tests-base</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <artifactId>richsobjects-jersey-client</artifactId>
+            <artifactId>richsobjects-api-jersey-client</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
             <version>${project.version}</version>
             <scope>test</scope>

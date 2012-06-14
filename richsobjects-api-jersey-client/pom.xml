@@ -8,7 +8,7 @@
         <version>0.2-BETA-SNAPSHOT</version>
     </parent>
 
-    <artifactId>richsobjects-jersey-client</artifactId>
+    <artifactId>richsobjects-api-jersey-client</artifactId>
 
     <properties>
         <com.sun.jersey.version>1.8</com.sun.jersey.version>
@@ -16,7 +16,7 @@
 
     <dependencies>
         <dependency>
-            <artifactId>richsobjects-api-provider-interfaces</artifactId>
+            <artifactId>richsobjects-interfaces</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
         </dependency>
         <dependency>
@@ -37,7 +37,7 @@
 
         <!-- TEST ONLY -->
         <dependency>
-            <artifactId>richsobjects-api-provider-base-tests</artifactId>
+            <artifactId>richsobjects-tests-base</artifactId>
             <groupId>com.github.ryanbrainard</groupId>
             <scope>test</scope>
         </dependency>

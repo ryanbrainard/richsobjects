@@ -31,7 +31,7 @@ public class SfdcApiLoader {
         );
 
         // decorate client with caching layers
-        final String cacheKey = sessionProvider.getAccessToken() + version;
+        final String cacheKey = System.getenv("RICH_SOBJECT_CACHE_KEY_PREFIX") + sessionProvider.getAccessToken() + version;
         for (SfdcApiCacheProvider cacheProvider : cacheLoader) {
             client = cacheProvider.get(cacheKey, client);
         }

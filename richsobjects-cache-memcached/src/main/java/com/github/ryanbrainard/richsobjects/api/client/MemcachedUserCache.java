@@ -31,7 +31,7 @@ class MemcachedUserCache implements SfdcApiClient {
         T get();
     }
 
-    private <T> T loadEntity(final String entityKey, final ValueProvider<T> provider) {
+    private <T> T loadEntity(final String entityKey, int expInMinutes, final ValueProvider<T> provider) {
         final Object fromCache = memcached.get(globalKey(entityKey));
 
         if (fromCache != null) {
@@ -39,7 +39,7 @@ class MemcachedUserCache implements SfdcApiClient {
             return (T) fromCache;
         } else {
             final T fromProvider = provider.get();
-            memcached.set(globalKey(entityKey), 5 * 60, fromProvider);
+            memcached.set(globalKey(entityKey), expInMinutes * 60, fromProvider);
             return fromProvider;
         }
     }
@@ -50,7 +50,7 @@ class MemcachedUserCache implements SfdcApiClient {
     
     @Override
     public GlobalDescription describeGlobal() {
-        return loadEntity("DESCRIBE_GLOBAL", new ValueProvider<GlobalDescription>() {
+        return loadEntity("DESCRIBE_GLOBAL", 30, new ValueProvider<GlobalDescription>() {
             @Override
             public GlobalDescription get() {
                 return apiClient.describeGlobal();
@@ -65,7 +65,7 @@ class MemcachedUserCache implements SfdcApiClient {
 
     @Override
     public SObjectDescription describeSObject(final String type) {
-        return loadEntity(type, new ValueProvider<SObjectDescription>() {
+        return loadEntity(type, 30, new ValueProvider<SObjectDescription>() {
             @Override
             public SObjectDescription get() {
                 return apiClient.describeSObject(type);
@@ -92,7 +92,7 @@ class MemcachedUserCache implements SfdcApiClient {
 
     @Override
     public Map<String, ?> getSObject(final String type, final String id) {
-        return loadEntity(id, new ValueProvider<Map<String, ?>>() {
+        return loadEntity(id, 1, new ValueProvider<Map<String, ?>>() {
             @Override
             public Map<String, ?> get() {
                 return apiClient.getSObject(type, id);

@@ -8,11 +8,15 @@ import com.github.ryanbrainard.richsobjects.api.model.SObjectDescription;
 import com.github.ryanbrainard.richsobjects.filters.UpdateableFieldsOnly;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Ryan Brainard
  */
 public class RichSObjectsServiceImpl implements RichSObjectsService {
+
+    private static final Pattern SOQL_TYPE_PATTERN = Pattern.compile(".*FROM\\s+(\\w+).*", Pattern.CASE_INSENSITIVE);
 
     @Override
     public SfdcApiClient api() {
@@ -33,7 +37,7 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
 
     @Override
     public SObjectDescription describe(String type) {
-        return api().describeSObject(type);
+        return api().describeSObject(type.toUpperCase());
     }
 
     @Override
@@ -110,13 +114,17 @@ public class RichSObjectsServiceImpl implements RichSObjectsService {
 
     @Override
     public Iterator<RichSObject> query(final String soql) {
-        final String type = soql.replaceFirst(".*FROM\\s+(\\w+).*", "$1");
+        final Matcher matcher = SOQL_TYPE_PATTERN.matcher(soql);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Could not determine type from SOQL query: " + soql);
+        }
+        final String type = matcher.group(1);
         final SObjectDescription metadata = describe(type);
-        
+
         return new Iterator<RichSObject>() {
             QueryResult queryResult = api().query(soql);
             Iterator<Map<String, ?>> queryResultItr = queryResult.getRecords().iterator();
-            
+
             @Override
             public boolean hasNext() {
                 return queryResultItr.hasNext() || !queryResult.isDone();

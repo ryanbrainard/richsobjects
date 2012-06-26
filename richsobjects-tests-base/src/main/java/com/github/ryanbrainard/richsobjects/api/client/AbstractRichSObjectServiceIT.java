@@ -67,6 +67,19 @@ public abstract class AbstractRichSObjectServiceIT {
     }
 
     @Test
+    public void testQueryCaseSensitivity() {
+        Iterator<RichSObject> queryResults = service.query("sElEcT  iD  fRoM aCcOuNt  lImIt  1");
+
+        int count = 0;
+        while (queryResults.hasNext()) {
+            assertEquals("Account", queryResults.next().getMetadata().getName());
+            count++;
+        }
+
+        assertEquals(count, 1);
+    }
+
+    @Test
     public void testSObjectCRUD() {
         final RichSObject newAcct = service.of("Account").getField("Name").setValue("TEST1");
 

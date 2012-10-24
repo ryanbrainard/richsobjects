@@ -13,6 +13,41 @@ like:
  - Transparent session providing. Define how to provide session once and forget it.
  - Modular API caching layer. Cut down on unneeded API calls using the included `richsobjects-cache-simple` or supplying your own provider.
 
+##Example Usage
+
+    // Initialize the service
+    RichSObjectsService service = new RichSObjectsServiceImpl();
+
+    // Query
+    Iterator<RichSObject> records = service.query("SELECT Name, CreatedDate, AccountId FROM Contact WHERE AccountId != null");
+
+    // Iterate over the records (fetching additional batches is handled for you)
+    while (records.hasNext()) {
+        RichSObject record = records.next();
+
+        // Iterate over the fields. Add a nestable filter to narrow down your view
+        Iterator<RichSObject.RichField> fields = new PopulatedFieldsOnly(record.getFields());
+        while (fields.hasNext()) {
+            RichSObject.RichField field = fields.next();
+
+            // Easy access to metadata and data together. Referenced object name resolution with asAnyWithNameRef()
+            field.getMetadata().getLabel() + ": " + field.asAnyWithNameRef();
+        }
+
+        // Direct access to fields (with case-insensitive field names)
+        record.getField("createdDate").getValue();                                               // raw value
+        record.getField("createdDate").asAny();                                                  // implicitly converted to Java type
+        record.getField("createdDate").asDate();                                                 // explicitly converted to Java type
+        record.getField("accountId").asRef().getField("ownerId").getValue();                     // traverse relationships and data is fetched automatically
+        record.getField("accountId").asRef().getField("ownerId").getMetadata().isUpdateable();   // metadata is always accessible where you need it, even across relationships
+    }
+
+    // Setting field values
+    final RichSObject fetchedRecord = service.fetch(account, id);                           // immutable and does not change below
+    final RichSObject updatedRecord = fetchedRecord.getField("Name").setValue("NEW VALUE"); // returns a new immutable copy of the record
+    final RichSObject savedRecord   = service.update(updatedRecord);                        // sends update to API and gets a fresh copy of the record
+
+
 ##Adding Rich SObjects to an App
 This is a modular library and the various modules can added to your `pom.xml` as dependencies for desired functionality:
 
@@ -93,40 +128,6 @@ to tell RichSObjects how to get session info from your app. Then put the fully-q
 #### Logging
 This library uses SLF4J for logging, which is disabled by default.
 To enable logging, include of the SLF4J binding implementation of your choice in your application.
-
-##Example Usage
-
-    // Initialize the service
-    RichSObjectsService service = new RichSObjectsServiceImpl();
-
-    // Query
-    Iterator<RichSObject> records = service.query("SELECT Name, CreatedDate, AccountId FROM Contact WHERE AccountId != null");
-
-    // Iterate over the records (fetching additional batches is handled for you)
-    while (records.hasNext()) {
-        RichSObject record = records.next();
-
-        // Iterate over the fields. Add a nestable filter to narrow down your view
-        Iterator<RichSObject.RichField> fields = new PopulatedFieldsOnly(record.getFields());
-        while (fields.hasNext()) {
-            RichSObject.RichField field = fields.next();
-
-            // Easy access to metadata and data together. Referenced object name resolution with asAnyWithNameRef()
-            field.getMetadata().getLabel() + ": " + field.asAnyWithNameRef();
-        }
-
-        // Direct access to fields (with case-insensitive field names)
-        record.getField("createdDate").getValue();                                               // raw value
-        record.getField("createdDate").asAny();                                                  // implicitly converted to Java type
-        record.getField("createdDate").asDate();                                                 // explicitly converted to Java type
-        record.getField("accountId").asRef().getField("ownerId").getValue();                     // traverse relationships and data is fetched automatically
-        record.getField("accountId").asRef().getField("ownerId").getMetadata().isUpdateable();   // metadata is always accessible where you need it, even across relationships
-    }
-
-    // Setting field values
-    final RichSObject fetchedRecord = service.fetch(account, id);                           // immutable and does not change below
-    final RichSObject updatedRecord = fetchedRecord.getField("Name").setValue("NEW VALUE"); // returns a new immutable copy of the record
-    final RichSObject savedRecord   = service.update(updatedRecord);                        // sends update to API and gets a fresh copy of the record
 
 ##Hacking
 If you'd like to contribute to this project, fork it and send me a pull request with tests.
